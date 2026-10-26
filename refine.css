@@ -182,15 +182,17 @@ em{color:var(--blue)}
 .app-copy>p{font-size:23px}
 .app-features span{font-size:17px}
 .app-copy>small{font-size:15px}
+.app-copy{min-width:0}
 .device-stage{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;min-width:0;padding:24px}
 .device-frame{
-  position:relative;width:min(350px,100%);height:690px;
-  padding:10px;border:3px solid #171719;border-radius:43px;
+  position:relative;width:min(340px,100%);height:auto;aspect-ratio:1/2;
+  border:3px solid #171719;border-radius:43px;
   background:#171719;box-shadow:0 28px 0 #082961,0 37px 65px #00194b9c;
   overflow:hidden;
 }
 .device-frame iframe{
-  display:block;width:100%;height:100%;border:0;
+  position:absolute;inset:8px;display:block;
+  width:calc(100% - 16px);height:calc(100% - 16px);border:0;
   background:var(--paper);border-radius:30px;
 }
 .device-camera{
@@ -222,7 +224,7 @@ em{color:var(--blue)}
   .experience-card h3{font-size:clamp(23px,3.8vw,31px)}
   .experience-card p{font-size:17px}
   .app-section{grid-template-columns:1fr}
-  .device-frame{height:665px}
+  .device-frame{width:min(330px,100%)}
 }
 @media(max-width:560px){
   body{font-size:18px}
@@ -257,7 +259,7 @@ em{color:var(--blue)}
   .app-copy h2{font-size:clamp(43px,10vw,58px)}
   .app-copy>p{font-size:21px}
   .device-stage{padding:8px 0 38px}
-  .device-frame{width:min(330px,100%);height:654px}
+  .device-frame{width:min(318px,100%)}
   .tickets-section h2{font-size:clamp(46px,10vw,62px)}
   .footer-top p{font-size:34px}
 }
