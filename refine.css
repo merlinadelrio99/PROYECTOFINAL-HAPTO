@@ -1,0 +1,391 @@
+/* Ajustes editoriales: tipografía de la app, fragmentos y espacios actuales. */
+:root{
+  --paper:#f7f5f0;
+  --white:#fdfcf9;
+  --ink:#1f1c1e;
+  --blue:#003b94;
+  --amber:#edc325;
+  --line:#cbd0d6;
+  --display:'Space Grotesk',Arial,sans-serif;
+}
+body{font:500 20px/1.38 'Big Shoulders',Arial,sans-serif;background:var(--paper)}
+p{line-height:1.4}
+h1,h2,h3,h4{font-family:var(--display);font-weight:650;letter-spacing:-.048em;line-height:1.07;text-wrap:balance}
+em{color:var(--blue)}
+.small-label,.eyebrow,.section-index,.section-index span{font-size:15px}
+.section-heading{align-items:center;gap:clamp(28px,5vw,85px);margin:48px 0 42px}
+.section-heading h2,
+.intro-grid h2,.ventures-intro h2,.info-layout h2{font-size:clamp(48px,5.3vw,86px);line-height:1.08;letter-spacing:-.05em}
+.section-heading p{max-width:510px;font-size:22px;line-height:1.35}
+.section-pad{padding-block:clamp(78px,8vw,124px)}
+.top-line{background:#082c76}
+.site-header{background:var(--blue);border-bottom:1px solid #ffffff35}
+.logo-link img,.footer-logo img{
+  background:transparent;
+  filter:grayscale(1) invert(1) contrast(4);
+  mix-blend-mode:screen;
+}
+.logo-link span,.footer-logo span{color:#fff}
+.primary-nav a{color:#fff;font-size:16px}
+.primary-nav a:hover{color:var(--amber)}
+.primary-nav .nav-ticket{color:var(--ink)}
+.menu-toggle span{background:#fff}
+
+/* Una sola intervención visual: el velo cubre casi toda la composición. */
+.hero{grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr)}
+.hero-intro{background:var(--paper)}
+.hero h1{
+  font-size:clamp(48px,5.4vw,84px);
+  line-height:1.08;
+  letter-spacing:-.055em;
+  margin:54px 0 30px;
+  max-width:750px;
+}
+.hero h1 span{white-space:nowrap;margin-bottom:.045em}
+.hero h1 span:nth-child(2){color:var(--blue)}
+.hero-sub{font:500 clamp(20px,1.8vw,25px)/1.32 'Big Shoulders',sans-serif;max-width:550px}
+.hero-tagline{font:700 30px/1.03 'Space Grotesk',sans-serif;letter-spacing:-.07em}
+.hero-fragment{background-size:auto 255%;background-position:100% 6%}
+.hero-art::before{background:linear-gradient(0deg,#001a55a6,transparent 70%),repeating-linear-gradient(90deg,transparent 0 10px,#ffffff18 10px 11px)}
+.hero-art::after{width:5%}
+.hero-reading{bottom:10%;left:10%}
+.hero-reading span,.hero-reading small{font-family:'Big Shoulders',sans-serif}
+.hero-reading strong{font:700 clamp(63px,6vw,96px)/1.02 'Space Grotesk',sans-serif;letter-spacing:-.07em}
+.hero-veil{
+  inset:2.5% 3% 3% 5%;
+  padding:32px;
+  background:#f9f8f0dd;
+  backdrop-filter:blur(13px);
+  -webkit-backdrop-filter:blur(13px);
+  box-shadow:12px 20px 30px #001b5350;
+}
+.hero-veil span{font-size:24px}
+.veil-control{right:24px;bottom:22px}
+
+/* Las imágenes de afiche aparecen como materia: una ampliación por sección. */
+.intro-section,.concept-section,.agenda-section,.ventures-section,.info-section,.impact-section,.tickets-section{position:relative;isolation:isolate;overflow:hidden}
+.intro-section>*,
+.concept-section>*,
+.agenda-section>*,
+.ventures-section>*,
+.info-section>*,
+.impact-section>*,
+.tickets-section>*{position:relative;z-index:1}
+.intro-section::before,.agenda-section::before,.ventures-section::before,
+.info-section::before,.impact-section::before,.tickets-section::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  pointer-events:none;
+  background-image:none;
+  background-repeat:no-repeat;
+  opacity:.1;
+}
+.intro-section::before{
+  width:min(47vw,650px);height:690px;right:-12%;top:3%;
+  background-position:100% 0;background-size:auto 205%;
+  clip-path:polygon(15% 0,100% 0,100% 93%,6% 100%,0 69%);
+}
+.agenda-section::before{
+  width:42%;height:550px;right:-10%;top:1%;
+  background-position:100% 2%;background-size:auto 250%;
+  clip-path:polygon(17% 0,100% 0,100% 100%,0 78%);
+}
+.ventures-section::before{
+  width:42%;height:600px;left:-15%;top:18%;
+  background-position:93% 6%;background-size:auto 245%;
+  clip-path:polygon(0 0,100% 11%,78% 100%,0 90%);
+}
+.info-section::before{
+  width:42%;height:560px;left:-14%;top:2%;
+  background-position:98% 3%;background-size:auto 245%;
+  clip-path:polygon(0 0,100% 15%,78% 100%,0 88%);
+}
+.impact-section::before{
+  width:45%;height:620px;right:-13%;top:2%;
+  background-position:99% 0;background-size:auto 255%;
+  clip-path:polygon(16% 0,100% 0,100% 100%,0 78%);
+}
+.tickets-section::before{
+  width:45%;height:500px;right:-13%;top:-30%;
+  background-position:100% 1%;background-size:auto 260%;
+  clip-path:polygon(17% 0,100% 0,100% 100%,0 83%);
+}
+.intro-text{font-size:23px}
+.date-band::before{inset:0 0 0 52%;background-size:auto 430%;background-position:100% 5%}
+.date-band strong{font-size:clamp(51px,5vw,75px);letter-spacing:-.06em}
+.date-band small,.date-band div>span:last-child{font-size:19px}
+.countdown strong{font-size:clamp(48px,5.3vw,77px)}
+.concept-section{background:#e8edf7}
+.concept-section::before{
+  content:"";position:absolute;z-index:0;pointer-events:none;
+  width:48%;height:490px;right:-16%;top:0;
+  background:none;
+  opacity:.1;
+  clip-path:polygon(7% 0,100% 0,100% 100%,0 79%);
+}
+.concept-grid h3{font-size:clamp(27px,3vw,44px);line-height:1.12}
+.concept-grid p{font-size:18px;line-height:1.25;max-width:320px}
+.concept-grid li,.concept-grid li:nth-child(2),.concept-grid li:nth-child(5){min-height:235px}
+.concept-grid li:not(:first-child)::before{
+  content:"";position:absolute;right:-5%;top:-4%;width:45%;height:40%;
+  background:none;
+  clip-path:polygon(8% 0,100% 0,94% 100%,0 83%);opacity:.12;
+}
+.concept-grid li>span,.concept-grid li>div{position:relative;z-index:1}
+.agenda-status h3{font-size:clamp(29px,3vw,47px);line-height:1.13}
+.agenda-list h4{font-size:29px;line-height:1.15}
+.agenda-list p,.agenda-status p{font-size:19px}
+.ventures-intro h2{max-width:660px}
+.category-detail h3{font-size:clamp(48px,5vw,74px);line-height:1.08}
+.category-detail p,.category-detail .product-type{font-size:19px}
+
+/* Visualizaciones nuevas, identificadas por el espacio y su momento. */
+.experience-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-rows:none;
+  gap:15px;
+}
+.experience-card,.experience-card.tall{
+  display:flex;flex-direction:column;grid-row:auto;grid-column:auto;
+  min-width:0;background:var(--blue);border:0;
+}
+.experience-card img{
+  width:100%;height:auto;aspect-ratio:16/9;
+  object-fit:cover;object-position:center;
+  flex:none;
+}
+.experience-card::before,.experience-card::after{display:none}
+.experience-card>div:last-child{
+  position:static;z-index:1;min-height:132px;
+  padding:20px 23px 22px;
+}
+.experience-card span{color:var(--amber);font-size:17px}
+.experience-card h3{
+  font-size:clamp(27px,2.9vw,43px);
+  line-height:1.12;letter-spacing:-.05em;
+  margin:7px 0 8px;
+}
+.experience-card p{font-size:19px;line-height:1.25;max-width:none}
+.experience-card:nth-child(2n){background:#0a337c}
+.experience-card:hover img{transform:scale(1.015)}
+.map-detail h3{font-size:clamp(31px,3vw,48px);line-height:1.13}
+.arrival-grid h3,.impact-actions h3,.tickets-section h2,
+.info-layout h2,.app-copy h2{line-height:1.08}
+.arrival-grid h3{font-size:32px}
+.faq summary{font-size:27px}
+.impact-stats strong{font-size:clamp(54px,6vw,92px);line-height:1.1}
+.impact-actions h3{font-size:clamp(34px,4vw,56px)}
+.app-section::before{opacity:.12;background-position:97% 0;background-size:auto 290%}
+.app-copy h2{font-size:clamp(49px,5.5vw,87px)}
+.app-copy>p{font-size:23px}
+.app-features span{font-size:17px}
+.app-copy>small{font-size:15px}
+.app-copy{min-width:0}
+.device-stage{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;min-width:0;padding:24px}
+.device-frame{
+  position:relative;width:min(340px,100%);height:auto;aspect-ratio:1/2;
+  border:3px solid #171719;border-radius:43px;
+  background:#171719;box-shadow:0 28px 0 #082961,0 37px 65px #00194b9c;
+  overflow:hidden;
+}
+.device-frame iframe{
+  position:absolute;inset:8px;display:block;
+  width:calc(100% - 16px);height:calc(100% - 16px);border:0;
+  background:var(--paper);border-radius:30px;
+}
+.device-camera{
+  position:absolute;z-index:2;top:13px;left:50%;transform:translateX(-50%);
+  width:72px;height:12px;border-radius:20px;background:#151719;
+  box-shadow:0 0 0 3px #151719;
+  pointer-events:none;
+}
+.tickets-section h2{font-size:clamp(48px,5.5vw,88px)}
+.footer-logo img{padding:0}
+.footer-top p{font:650 clamp(28px,3.4vw,48px)/1.12 'Space Grotesk',sans-serif;letter-spacing:-.055em}
+
+@media(max-width:1010px){
+  .primary-nav{background:var(--blue);border-bottom-color:var(--amber)}
+  .primary-nav a{color:#fff;font-size:20px}
+  .menu-toggle span{background:#fff}
+  .hero h1{font-size:clamp(43px,5.1vw,68px)}
+  .experience-card:nth-child(5){grid-column:auto}
+}
+@media(max-width:760px){
+  .section-heading{display:block}
+  .section-heading p{margin-top:20px}
+  .hero h1{font-size:clamp(48px,8.8vw,66px)}
+  .hero-art{height:520px}
+  .hero-reading strong{font-size:clamp(58px,10vw,83px)}
+  .hero-veil{inset:2% 3% 3% 4%}
+  .experience-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .experience-card>div:last-child{min-height:153px}
+  .experience-card h3{font-size:clamp(23px,3.8vw,31px)}
+  .experience-card p{font-size:17px}
+  .app-section{grid-template-columns:1fr}
+  .device-frame{width:min(330px,100%)}
+}
+@media(max-width:560px){
+  body{font-size:18px}
+  .site-header{min-height:68px}
+  .section-pad{padding:68px 20px}
+  .section-heading h2,.intro-grid h2,.ventures-intro h2,.info-layout h2{font-size:clamp(40px,10.5vw,58px);line-height:1.11}
+  .section-heading p{font-size:19px}
+  .hero-intro{min-height:510px}
+  .hero h1{font-size:clamp(38px,10.1vw,56px);line-height:1.08;margin:43px 0 24px}
+  .hero h1 span{white-space:normal}
+  .hero-sub{font-size:20px}
+  .hero-tagline{font-size:23px;margin-top:35px}
+  .hero-art{height:440px}
+  .hero-reading{left:10%;bottom:14%}
+  .hero-reading strong{font-size:clamp(46px,12vw,67px)}
+  .hero-veil{inset:2% 3% 3% 4%;padding:20px}
+  .hero-veil span{font-size:19px}
+  .intro-text{font-size:21px}
+  .concept-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .concept-grid li,.concept-grid li:nth-child(2),.concept-grid li:nth-child(5){min-height:235px;padding:17px}
+  .concept-grid h3{font-size:23px;line-height:1.1}
+  .concept-grid p{font-size:16px}
+  .date-band strong{font-size:clamp(38px,9vw,50px)}
+  .experience-grid{display:grid;grid-template-columns:1fr;overflow:visible}
+  .experience-card,.experience-card.tall{height:auto;min-height:0;flex:auto}
+  .experience-card img{aspect-ratio:16/9}
+  .experience-card>div:last-child{min-height:0;padding:17px 19px 19px}
+  .experience-card h3{font-size:30px}
+  .experience-card p{font-size:18px}
+  .map-detail h3{font-size:34px}
+  .impact-stats strong{font-size:68px}
+  .app-copy h2{font-size:clamp(43px,10vw,58px)}
+  .app-copy>p{font-size:21px}
+  .device-stage{padding:8px 0 38px}
+  .device-frame{width:min(318px,100%)}
+  .tickets-section h2{font-size:clamp(46px,10vw,62px)}
+  .footer-top p{font-size:34px}
+}
+@media(max-width:380px){
+  .hero h1{font-size:10vw}
+  .concept-grid h3{font-size:22px}
+}
+@media(prefers-reduced-motion:reduce){
+  .experience-card img,.hero-veil{transition:none}
+}
+
+/* Cada pieza aporta un fragmento propio, sin reproducir sus textos o logos. */
+.hero-fragment{
+  background-image:url('assets/fondo-invitacion-trama.webp');
+  background-repeat:no-repeat;
+  background-size:auto 125%;
+  background-position:76% 50%;
+}
+.intro-section::before{
+  background-image:url('assets/fondo-sticker.webp');
+  background-size:235% auto;
+  background-position:0 100%;
+  opacity:.29;
+}
+.date-band::before{
+  background-image:linear-gradient(110deg,#f8f9f3e6,#f8f9f38c),url('assets/fondo-pin.webp');
+  background-size:cover,auto 620%;
+  background-position:center,0 100%;
+  opacity:.75;
+}
+.concept-section::before{
+  background-image:url('assets/fondo-abanico.webp');
+  background-size:130% auto;
+  background-position:30% 0;
+  opacity:.24;
+}
+.concept-art{
+  background-image:url('assets/fondo-sticker.webp');
+  background-size:190% auto;
+  background-position:0 100%;
+}
+.concept-grid li:not(:first-child):nth-child(n)::before{
+  right:-3%;top:-5%;width:46%;height:43%;
+  background-repeat:no-repeat;
+  clip-path:polygon(8% 0,100% 0,94% 100%,0 82%);
+  opacity:.28;
+}
+.concept-grid li:not(:first-child):nth-child(2)::before{
+  background-image:url('assets/fondo-pin.webp');
+  background-size:250% auto;background-position:0 100%;
+}
+.concept-grid li:not(:first-child):nth-child(3)::before{
+  background-image:url('assets/fondo-invitacion-trama.webp');
+  background-size:auto 360%;background-position:95% 55%;
+}
+.concept-grid li:not(:first-child):nth-child(4)::before{
+  background-image:url('assets/fondo-abanico.webp');
+  background-size:cover;background-position:center 0;
+}
+.concept-grid li:not(:first-child):nth-child(5)::before{
+  background-image:url('assets/fondo-texto-fragmentado.webp');
+  background-size:auto 410%;background-position:100% 100%;
+}
+.concept-grid li:not(:first-child):nth-child(6)::before{
+  background-image:url('assets/fondo-invitacion.webp');
+  background-size:auto 440%;background-position:100% 60%;
+}
+.agenda-section::before{
+  background-image:url('assets/fondo-pin.webp');
+  background-size:230% auto;
+  background-position:0 100%;
+  opacity:.28;
+}
+.ventures-section::before{
+  background-image:url('assets/fondo-invitacion.webp');
+  background-size:auto 285%;
+  background-position:100% 44%;
+  opacity:.22;
+}
+.category-detail::before{
+  background-image:url('assets/fondo-abanico.webp');
+  background-size:cover;
+  background-position:center 0;
+  opacity:.38;
+}
+.info-section::before{
+  background-image:url('assets/fondo-texto-fragmentado.webp');
+  background-size:auto 390%;
+  background-position:100% 100%;
+  opacity:.22;
+}
+.impact-section::before{
+  background-image:url('assets/fondo-invitacion-trama.webp');
+  background-size:auto 285%;
+  background-position:94% 50%;
+  opacity:.22;
+}
+.arrival-section::before{
+  background-image:url('assets/fondo-abanico.webp');
+  background-size:cover;
+  background-position:center 0;
+  opacity:.34;
+}
+.app-section::before{
+  inset:0 auto 0 4%;width:45%;
+  background-image:url('assets/fondo-abanico.webp');
+  background-size:cover;
+  background-position:center 27%;
+  opacity:.32;
+  transform:none;
+}
+.tickets-section::before{
+  background-image:url('assets/fondo-texto-fragmentado.webp');
+  background-size:auto 390%;
+  background-position:100% 100%;
+  opacity:.27;
+}
+.experience-fragment{
+  background-image:url('assets/fondo-invitacion.webp');
+  background-size:auto 270%;
+  background-position:100% 50%;
+}
+@media(max-width:560px){
+  .app-section::before{
+    left:5%;width:56%;
+    background-size:auto 160%;
+    background-position:center 27%;
+  }
+}
