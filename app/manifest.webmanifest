@@ -1,0 +1,19 @@
+{
+  "name": "Bioferia · Tu guía para cambiar",
+  "short_name": "Bioferia",
+  "description": "Guía de sustentabilidad, BioPoints y experiencias del festival.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f5f0",
+  "theme_color": "#f7f5f0",
+  "lang": "es-AR",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
