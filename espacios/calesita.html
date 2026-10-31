@@ -1,0 +1,658 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Calesita Bio Feria</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap">
+<style>@font-face{font-family:'Big Shoulders';src:url('../fonts/big-shoulders-variable-latin.woff2') format('woff2');font-weight:100 900;font-display:swap}
+@font-face{font-family:'Clash Display';src:url('../fonts/ClashDisplay-Variable.woff2') format('woff2');font-weight:200 700;font-display:swap}</style>
+<style>
+/* Layout: escena 3D a pantalla completa con luz de día; rótulos arriba y mandos abajo. El giro manda: óxido como protagonista sobre carbón, estelas en bordó, violeta y azul, puntada espiga en blanco. */
+:root {
+  --papel: #F3F3F1;
+  --carbon: #1F1C1E;
+  --oxido: #C15F2B;
+  --bordo: #931468;
+  --violeta: #A330B6;
+  --azul: #003B94;
+  --ambar: #E19A00;
+  --tinta: #1F1C1E;
+  --display: "Clash Display", "Big Shoulders", "Arial Black", system-ui, sans-serif;
+  --mono: "Big Shoulders", "Arial Narrow", system-ui, sans-serif;
+}
+html, body { height: 100%; }
+body { background: var(--papel); color: var(--tinta); overflow: hidden; font-family: var(--mono); }
+#escena { position: fixed; inset: 0; display: block; width: 100%; height: 100%; touch-action: none; }
+
+.rotulo {
+  position: fixed; top: 0; left: 0; right: 0;
+  padding-top: calc(14px + env(safe-area-inset-top, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;
+  pointer-events: none;
+}
+.marca { font-family: var(--display); font-weight: 800; line-height: .82; font-size: clamp(26px, 4vw, 40px); color: var(--carbon); letter-spacing: -.02em; }
+.marca small { display: block; font-size: .42em; letter-spacing: .02em; font-weight: 500; }
+.ficha { text-align: right; font-size: 11px; line-height: 1.5; letter-spacing: .06em; text-transform: uppercase; color: var(--tinta); }
+.ficha strong { display: block; font-family: var(--display); font-weight: 800; text-transform: none; letter-spacing: -.01em; font-size: clamp(20px, 3vw, 30px); line-height: 1; color: var(--oxido); margin-bottom: 4px; }
+.ficha .hilo { color: var(--bordo); }
+
+.mandos {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between;
+}
+.grupo { display: flex; flex-wrap: wrap; gap: 6px; }
+button {
+  font: 600 14px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase;
+  background: var(--papel); color: var(--oxido);
+  border: 1.5px dashed var(--oxido); padding: 9px 12px; cursor: pointer;
+}
+button[aria-pressed="true"] { background: var(--oxido); color: var(--papel); border-style: solid; }
+button:hover { border-style: solid; }
+button:focus-visible { outline: 2px solid var(--carbon); outline-offset: 2px; }
+.pista { font-size: 11px; color: var(--tinta); opacity: .7; }
+
+#mostrar {
+  position: fixed; right: max(12px, env(safe-area-inset-right, 0px)); bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  opacity: .35; font-size: 11px; padding: 6px 9px;
+}
+#mostrar:hover { opacity: 1; }
+body.limpio .rotulo, body.limpio .mandos { display: none; }
+body:not(.limpio) #mostrar { display: none; }
+
+@media (max-width: 520px) {
+  .pista { display: none; }
+  .ficha span { display: none; }
+}
+body.embebido .marca{display:none}
+</style>
+<script>if(location.search.indexOf("embed")>-1)document.documentElement.classList.add("emb");addEventListener("DOMContentLoaded",()=>{if(document.documentElement.classList.contains("emb"))document.body.classList.add("embebido")});</script>
+
+<canvas id="escena" aria-label="Modelo 3D de la calesita al revés de Bio Feria, de dos pisos: techo invertido, núcleo de espejos que deforman de piso a techo y escalera caracol; sillas dadas vuelta que cuelgan como hamacas; telas de colores, telas cortadas e hilos que cuelgan y se mueven con el giro"></canvas>
+
+<header class="rotulo">
+  <div class="marca">BIO<small>FERIA</small></div>
+  <div class="ficha">
+    <strong>La calesita al revés</strong>
+    <span>Instalación · El giro<br></span>
+    <span class="hilo">Algodón · puntada espiga</span><br>
+    9 al 11 de abril de 2027
+  </div>
+</header>
+
+<nav class="mandos" aria-label="Controles de la escena">
+  <div class="grupo" role="group" aria-label="Vistas">
+    <button id="v-frente" aria-pressed="true">Frente</button>
+    <button id="v-espejo" aria-pressed="false">Frente al espejo</button>
+    <button id="v-techo" aria-pressed="false">Mirar el techo</button>
+    <button id="v-aerea" aria-pressed="false">Desde arriba</button>
+    <button id="v-ras" aria-pressed="false">A ras del piso</button>
+    <button id="v-zootropo" aria-pressed="false">Primer piso</button>
+    <button id="v-sillas" aria-pressed="false">Asientos</button>
+  </div>
+  <div class="grupo">
+    <button id="girar" aria-pressed="true">Girando</button>
+    <button id="gente" aria-pressed="false">Sin gente</button>
+    <button id="limpiar">Ocultar textos</button>
+  </div>
+  <div class="pista">Arrastrá para mirar alrededor · rueda o pellizco para acercar</div>
+</nav>
+<button id="mostrar">Mostrar textos</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function () {
+  const C = { papel:'#F3F3F1', carbon:'#1F1C1E', oxido:'#C15F2B', bordo:'#931468', violeta:'#A330B6', azul:'#003B94', ambar:'#E19A00', crudo:'#E6DDCB' };
+  const TAU = Math.PI * 2;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---------- Renderer ----------
+  const canvas = document.getElementById('escena');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color('#E6EEF5');
+  scene.fog = new THREE.Fog('#E3EBEE', 40, 95);
+
+  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 200);
+  camera.position.set(17, 6, 19);
+  const controls = new THREE.OrbitControls(camera, canvas);
+  controls.target.set(0, 4, 0);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.minDistance = 1.5;
+  controls.maxDistance = 40;
+  controls.maxPolarAngle = Math.PI * 0.94;
+
+  // ---------- Luz natural ----------
+  scene.add(new THREE.HemisphereLight('#FFF6E8', '#8C9A6A', 0.8));
+  const sol = new THREE.DirectionalLight('#FFE7C4', 1.25);
+  sol.position.set(12, 18, 8);
+  sol.castShadow = true;
+  sol.shadow.mapSize.set(2048, 2048);
+  Object.assign(sol.shadow.camera, { left: -18, right: 18, top: 18, bottom: -18, near: 1, far: 60 });
+  sol.shadow.bias = -0.0005;
+  sol.shadow.radius = 4;
+  scene.add(sol);
+
+  // ---------- Texturas dibujadas ----------
+  function lienzo(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return [c, c.getContext('2d')]; }
+  function textura(c) { const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.anisotropy = renderer.capabilities.getMaxAnisotropy(); return t; }
+  function trama(ctx, w, h, paso, alpha) {
+    ctx.save(); ctx.globalAlpha = alpha;
+    for (let y = 0; y < h; y += paso) { ctx.strokeStyle = Math.random() < .5 ? '#000' : '#fff'; ctx.lineWidth = paso * (.25 + Math.random() * .3); ctx.beginPath(); ctx.moveTo(0, y + Math.random()); ctx.lineTo(w, y + Math.random() * 2); ctx.stroke(); }
+    for (let x = 0; x < w; x += paso) { ctx.strokeStyle = Math.random() < .5 ? '#000' : '#fff'; ctx.lineWidth = paso * (.2 + Math.random() * .3); ctx.beginPath(); ctx.moveTo(x + Math.random(), 0); ctx.lineTo(x + Math.random() * 2, h); ctx.stroke(); }
+    ctx.restore();
+  }
+  function espiral(ctx, cx, cy, R, vueltas, fase, color, ancho, dash) {
+    ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = ancho; ctx.lineCap = 'round';
+    if (dash) ctx.setLineDash(dash);
+    ctx.beginPath();
+    const n = 1400;
+    for (let i = 0; i <= n; i++) { const t = i / n; const a = fase + t * vueltas * TAU; const r = R * t; const x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+    ctx.stroke(); ctx.restore();
+  }
+  // puntada espiga a lo largo de una recta horizontal
+  function espigaRecta(ctx, x0, x1, y, h, paso, color, ancho) {
+    ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = ancho; ctx.lineCap = 'round';
+    let k = 0;
+    for (let x = x0; x < x1; x += paso, k++) { ctx.beginPath(); if (k % 2) { ctx.moveTo(x, y + h); ctx.lineTo(x + paso * 1.6, y - h); } else { ctx.moveTo(x, y - h); ctx.lineTo(x + paso * 1.6, y + h); } ctx.stroke(); }
+    ctx.restore();
+  }
+  // puntada espiga a lo largo de un círculo
+  function espigaCirculo(ctx, cx, cy, r, h, n, color, ancho) {
+    ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = ancho; ctx.lineCap = 'round';
+    for (let k = 0; k < n; k++) {
+      const a0 = k / n * TAU, a1 = a0 + 1.6 / n * TAU, s = k % 2 ? 1 : -1;
+      ctx.beginPath();
+      ctx.moveTo(cx + Math.cos(a0) * (r + s * h), cy + Math.sin(a0) * (r + s * h));
+      ctx.lineTo(cx + Math.cos(a1) * (r - s * h), cy + Math.sin(a1) * (r - s * h));
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+  function salpicar(ctx, px, py, color, n, rmax) {
+    ctx.save(); ctx.fillStyle = color;
+    for (let k = 0; k < n; k++) { const a = Math.random() * TAU, d = Math.random() ** 2 * rmax; ctx.beginPath(); ctx.arc(px + Math.cos(a) * d, py + Math.sin(a) * d, 2 + Math.random() * (k < 3 ? rmax * .25 : rmax * .07), 0, TAU); ctx.fill(); }
+    ctx.restore();
+  }
+
+  // Techo invertido: carbón con la espiral óxido y estelas de color, como una foto de larga exposición
+  function texTecho() {
+    const S = 2048, [c, x] = lienzo(S, S), m = S / 2;
+    x.fillStyle = C.carbon; x.fillRect(0, 0, S, S);
+    trama(x, S, S, 6, .08);
+    espiral(x, m, m, m * .98, 5, 0, C.oxido, 78);
+    espiral(x, m, m, m * .98, 5, Math.PI * .55, C.bordo, 12);
+    espiral(x, m, m, m * .98, 5, Math.PI * 1.1, C.violeta, 8);
+    espiral(x, m, m, m * .98, 5, Math.PI * 1.5, C.azul, 10);
+    espiral(x, m, m, m * .98, 5, 0, C.papel, 6, [26, 22]);
+    salpicar(x, m * 1.45, m * .62, C.oxido, 40, 120);
+    salpicar(x, m * .55, m * 1.4, C.papel, 30, 90);
+    // borde: banda óxido con puntada espiga blanca
+    x.strokeStyle = C.oxido; x.lineWidth = 64; x.beginPath(); x.arc(m, m, m - 34, 0, TAU); x.stroke();
+    espigaCirculo(x, m, m, m - 34, 18, 220, C.papel, 5);
+    return textura(c);
+  }
+
+  // Faldón invertido: el festón apunta hacia arriba
+  function texFaldon() {
+    const W = 2048, H = 256, [c, x] = lienzo(W, H);
+    const base = 106, ondas = 16, r = W / ondas / 2;
+    x.fillStyle = C.oxido; x.fillRect(0, base, W, H - base);
+    for (let i = 0; i < ondas; i++) { x.beginPath(); x.arc(r + i * 2 * r, base, r, Math.PI, TAU); x.fill(); }
+    trama(x, W, H, 5, .14);
+    espigaRecta(x, 0, W, 190, 16, 18, C.papel, 5);
+    x.fillStyle = C.carbon;
+    for (let i = 0; i < ondas; i++) { x.beginPath(); x.arc(r + i * 2 * r, base - r * .35, 9, 0, TAU); x.fill(); }
+    const t = textura(c); t.wrapS = THREE.RepeatWrapping; t.repeat.x = 2; return t;
+  }
+
+  function texPlataforma() {
+    const S = 1024, [c, x] = lienzo(S, S), m = S / 2;
+    x.fillStyle = '#2A2523'; x.fillRect(0, 0, S, S);
+    trama(x, S, S, 4, .1);
+    espiral(x, m, m, m * .96, 3.2, 0, C.oxido, 20);
+    [.94, .66, .38].forEach(k => espigaCirculo(x, m, m, m * k, 10, Math.round(140 * k), C.papel, 4));
+    return textura(c);
+  }
+  function texCanto() {
+    const W = 2048, H = 128, [c, x] = lienzo(W, H);
+    x.fillStyle = C.carbon; x.fillRect(0, 0, W, H);
+    trama(x, W, H, 4, .12);
+    x.fillStyle = C.oxido; x.fillRect(0, 38, W, 52);
+    espigaRecta(x, 0, W, 64, 16, 16, C.papel, 4);
+    const t = textura(c); t.wrapS = THREE.RepeatWrapping; t.repeat.x = 2; return t;
+  }
+
+  // Suelo: arpillera con salpicaduras y el recorrido en espiral que lleva a la calesita
+  function texSuelo() {
+    const S = 2048, [c, x] = lienzo(S, S), m = S / 2, R = S / 2;
+    x.fillStyle = '#E3D8C2'; x.fillRect(0, 0, S, S);
+    trama(x, S, S, 7, .16);
+    [[C.oxido, .22, .3], [C.bordo, .78, .25], [C.violeta, .2, .78], [C.azul, .82, .74], [C.oxido, .62, .88]].forEach(([col, px, py]) => salpicar(x, px * S, py * S, col, 40, 120));
+    x.save(); x.translate(m, m);
+    const n = 900;
+    x.strokeStyle = C.oxido; x.lineWidth = 12; x.lineCap = 'round'; x.setLineDash([30, 16]);
+    x.beginPath();
+    for (let i = 0; i <= n; i++) { const t = i / n; const r = R * (1 - t * .66); const a = -Math.PI * .25 + t * TAU * 1.6; const X = Math.cos(a) * r, Y = Math.sin(a) * r; i ? x.lineTo(X, Y) : x.moveTo(X, Y); }
+    x.stroke(); x.setLineDash([]);
+    // espiga blanca a los lados del recorrido
+    x.strokeStyle = C.papel; x.lineWidth = 4;
+    for (let i = 0; i < 260; i++) {
+      const t = i / 260, t2 = (i + 1.6) / 260, s = i % 2 ? 1 : -1;
+      const r1 = R * (1 - t * .66) + s * 16, a1 = -Math.PI * .25 + t * TAU * 1.6;
+      const r2 = R * (1 - t2 * .66) - s * 16, a2 = -Math.PI * .25 + t2 * TAU * 1.6;
+      x.beginPath(); x.moveTo(Math.cos(a1) * r1, Math.sin(a1) * r1); x.lineTo(Math.cos(a2) * r2, Math.sin(a2) * r2); x.stroke();
+    }
+    x.restore();
+    return textura(c);
+  }
+
+  // los colores de la paleta se pasan a lineal para que se vean tal cual (sin quedar pastel)
+  const mat = (opt) => { if (typeof opt.color === 'string') opt.color = new THREE.Color(opt.color).convertSRGBToLinear(); return new THREE.MeshStandardMaterial(Object.assign({ roughness: .85, metalness: 0 }, opt)); };
+  function sombra(o) { o.traverse(m => { if (m.isMesh) { m.castShadow = true; m.receiveShadow = true; } }); return o; }
+  function hiloTubo(puntos, radio, color, segs) {
+    const curva = new THREE.CatmullRomCurve3(puntos);
+    return new THREE.Mesh(new THREE.TubeGeometry(curva, segs || puntos.length * 3, radio, 8, false), mat({ color, roughness: .95 }));
+  }
+  function helice(r, y0, y1, vueltas, fase) {
+    const p = [], n = Math.max(40, vueltas * 24);
+    for (let i = 0; i <= n; i++) { const t = i / n, a = fase + t * vueltas * TAU; p.push(new THREE.Vector3(Math.cos(a) * r, y0 + (y1 - y0) * t, Math.sin(a) * r)); }
+    return p;
+  }
+  function caja(w, h, d, color, x, y, z) { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat({ color, roughness: .7 })); m.position.set(x, y, z); return m; }
+
+  // pasto natural del predio (una baldosa de unos 12 m que se repite)
+  function texPasto(rep) {
+    let s = 5; const r = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+    const S = 2048, [c, x] = lienzo(S, S);
+    x.fillStyle = '#6E8A3E'; x.fillRect(0, 0, S, S);
+    for (let i = 0; i < 9000; i++) { x.fillStyle = `rgba(${60 + r() * 60},${95 + r() * 60},${30 + r() * 30},${.25 + r() * .3})`; x.beginPath(); x.arc(r() * S, r() * S, 6 + r() * 26, 0, TAU); x.fill(); }
+    for (let i = 0; i < 60000; i++) { const px = r() * S, py = r() * S, l = 4 + r() * 9; x.strokeStyle = `rgba(${50 + r() * 90},${90 + r() * 80},${25 + r() * 35},${.35 + r() * .4})`; x.lineWidth = 1 + r(); x.beginPath(); x.moveTo(px, py); x.lineTo(px + (r() - .5) * 3, py - l); x.stroke(); }
+    const t = textura(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep, rep); return t;
+  }
+
+  // ---------- Suelo ----------
+  const llano = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), mat({ map: texPasto(17), roughness: 1 }));
+  llano.rotation.x = -Math.PI / 2; llano.position.y = -0.01; llano.receiveShadow = true; scene.add(llano);
+  const alfombra = new THREE.Mesh(new THREE.CircleGeometry(16, 128), mat({ map: texSuelo() }));
+  alfombra.rotation.x = -Math.PI / 2; alfombra.receiveShadow = true; scene.add(alfombra);
+
+  // ---------- Calesita de dos pisos ----------
+  const calesita = new THREE.Group(); scene.add(calesita);
+  const R = 8, PISO = .45, R2 = 6.6, RIN2 = 2.8, Y2 = 3.4, ALTO = 6.6, TECHO_R = 8.8, TECHO_H = 1.8;
+  const PB = [C.bordo, C.ambar, C.azul, C.violeta, C.oxido, '#2C7486'];
+  const techoY = r => ALTO + TECHO_H * (r / TECHO_R) ** 1.15;   // techo dado vuelta: más alto en el borde
+
+  const plataforma = new THREE.Mesh(new THREE.CylinderGeometry(R, R, PISO, 160), [mat({ map: texCanto() }), mat({ map: texPlataforma() }), mat({ color: C.carbon })]);
+  plataforma.position.y = PISO / 2; calesita.add(sombra(plataforma));
+
+  // segundo piso: un anillo de madera con baranda, alrededor del núcleo
+  const gPiso2 = new THREE.RingGeometry(RIN2, R2, 140, 1); gPiso2.rotateX(-Math.PI / 2);
+  const piso2 = new THREE.Mesh(gPiso2, mat({ map: texPlataforma(), side: THREE.DoubleSide })); piso2.position.y = Y2 + .25; calesita.add(sombra(piso2));
+  const canto2 = new THREE.Mesh(new THREE.CylinderGeometry(R2, R2, .25, 140, 1, true), mat({ map: texCanto(), side: THREE.DoubleSide })); canto2.position.y = Y2 + .125; calesita.add(sombra(canto2));
+  const bajo2 = new THREE.Mesh(gPiso2.clone(), mat({ color: '#2B2426', side: THREE.DoubleSide })); bajo2.position.y = Y2; calesita.add(bajo2);
+  [[R2 - .05, 1], [RIN2 + .05, 1]].forEach(([r]) => {
+    const pasam = new THREE.Mesh(new THREE.TorusGeometry(r, .04, 8, 160), mat({ color: C.oxido })); pasam.rotation.x = Math.PI / 2; pasam.position.y = Y2 + 1.25; calesita.add(sombra(pasam));
+    [.4, .65, .9].forEach((h, k) => { const hilo = new THREE.Mesh(new THREE.TorusGeometry(r, .018, 6, 160), mat({ color: PB[k * 2 + (r > 4 ? 0 : 1)] })); hilo.rotation.x = Math.PI / 2; hilo.position.y = Y2 + .25 + h; calesita.add(hilo); });   // la baranda, de hilos de colores
+  });
+  for (let i = 0; i < 48; i++) { const a = i / 48 * TAU; const b = new THREE.Mesh(new THREE.CylinderGeometry(.025, .025, 1, 6), mat({ color: C.carbon })); b.position.set(Math.cos(a) * (R2 - .05), Y2 + .75, Math.sin(a) * (R2 - .05)); calesita.add(b); }
+
+  // escalera caracol alrededor de los espejos
+  const NE = 17, A0 = .3, AV = 1.55 * Math.PI;
+  for (let k = 0; k < NE; k++) {
+    const a = A0 + k / NE * AV, y = PISO + (k + 1) * (Y2 + .25 - PISO) / NE, rm = (1.45 + RIN2) / 2;
+    const esc = new THREE.Mesh(new THREE.BoxGeometry(RIN2 - 1.45, .07, .5), mat({ color: k % 2 ? C.ambar : C.oxido, roughness: .7 }));
+    esc.position.set(Math.cos(a) * rm, y, Math.sin(a) * rm); esc.rotation.y = -a; calesita.add(sombra(esc));
+  }
+  calesita.add(sombra(hiloTubo(Array.from({ length: 60 }, (_, k) => { const t = k / 59, a = A0 + t * AV; return new THREE.Vector3(Math.cos(a) * RIN2, PISO + 1 + t * (Y2 - PISO), Math.sin(a) * RIN2); }), .035, C.oxido, 200)));
+
+  // techo invertido, como un paraguas que dio vuelta el viento
+  const gTecho = new THREE.RingGeometry(0.001, TECHO_R, 200, 48); gTecho.rotateX(-Math.PI / 2);
+  const pos = gTecho.attributes.position;
+  for (let i = 0; i < pos.count; i++) { const r = Math.hypot(pos.getX(i), pos.getZ(i)); pos.setY(i, TECHO_H * (r / TECHO_R) ** 1.15); }
+  gTecho.computeVertexNormals();
+  const techo = new THREE.Mesh(gTecho, mat({ map: texTecho(), side: THREE.DoubleSide, roughness: .9 })); techo.position.y = ALTO; calesita.add(sombra(techo));
+  const pEsp = [];
+  for (let i = 0; i <= 600; i++) { const t = i / 600, a = t * 6 * TAU, r = TECHO_R * .94 * (1 - t) + 1.3 * t; pEsp.push(new THREE.Vector3(Math.cos(a) * r, techoY(r) + .07, Math.sin(a) * r)); }
+  calesita.add(sombra(hiloTubo(pEsp, .07, C.papel, 1400)));
+  const faldon = new THREE.Mesh(new THREE.CylinderGeometry(TECHO_R, TECHO_R, .9, 180, 1, true), mat({ map: texFaldon(), side: THREE.DoubleSide, alphaTest: .5 }));
+  faldon.position.y = ALTO + TECHO_H + .43; calesita.add(sombra(faldon));
+  const borde = new THREE.Mesh(new THREE.TorusGeometry(TECHO_R, .07, 10, 220), mat({ color: C.papel })); borde.rotation.x = Math.PI / 2; borde.position.y = ALTO + TECHO_H; calesita.add(sombra(borde));
+
+  // ---------- Núcleo de espejos, de piso a techo ----------
+  const espejos = new THREE.Group(); calesita.add(espejos);
+  const cubo = new THREE.WebGLCubeRenderTarget(256, { format: THREE.RGBFormat, generateMipmaps: true, minFilter: THREE.LinearMipmapLinearFilter });
+  const camCubo = new THREE.CubeCamera(0.1, 90, cubo); camCubo.position.set(0, 2.2, 0); calesita.add(camCubo);
+  const mEspejo = mat({ color: '#FFFFFF', metalness: 1, roughness: .04, envMap: cubo.texture, envMapIntensity: 1.1, side: THREE.DoubleSide });
+  function deformar(g, tipo, w, h) {
+    const p = g.attributes.position;
+    for (let k = 0; k < p.count; k++) {
+      const u = p.getX(k) / w + .5, v = p.getY(k) / h + .5; let z;
+      if (tipo === 0) z = .16 * Math.sin(Math.PI * u);
+      else if (tipo === 1) z = -.2 * Math.sin(Math.PI * u) * Math.sin(Math.PI * v);
+      else if (tipo === 2) z = .07 * Math.sin(v * TAU * 2.5);
+      else z = -.12 * Math.sin(Math.PI * v) + .08 * Math.sin(Math.PI * u);
+      p.setZ(k, z);
+    }
+    g.computeVertexNormals(); return g;
+  }
+  const LADOS = 8, RM = 1.3, ap = RM * Math.cos(Math.PI / LADOS), anchoP = 2 * RM * Math.sin(Math.PI / LADOS) * .98, altoP = ALTO - PISO;
+  for (let i = 0; i < LADOS; i++) {
+    const panel = new THREE.Mesh(deformar(new THREE.PlaneGeometry(anchoP, altoP, 14, 50), i % 4, anchoP, altoP), mEspejo);
+    const a = i / LADOS * TAU + Math.PI / LADOS;
+    panel.position.set(Math.cos(a) * ap, PISO + altoP / 2, Math.sin(a) * ap);
+    panel.lookAt(Math.cos(a) * ap * 3, PISO + altoP / 2, Math.sin(a) * ap * 3); espejos.add(panel);
+    const liston = new THREE.Mesh(new THREE.CylinderGeometry(.05, .05, altoP, 10), mat({ color: C.oxido }));
+    liston.position.set(Math.cos(a - Math.PI / LADOS) * RM, PISO + altoP / 2, Math.sin(a - Math.PI / LADOS) * RM); calesita.add(sombra(liston));
+  }
+
+  // ---------- Postes: atraviesan los dos pisos, con hilo enrollado ----------
+  const NP = 16, rPostes = 6.3;
+  for (let i = 0; i < NP; i++) {
+    const a = i / NP * TAU, px = Math.cos(a) * rPostes, pz = Math.sin(a) * rPostes, alto = techoY(rPostes) - PISO;
+    const poste = new THREE.Mesh(new THREE.CylinderGeometry(.07, .07, alto, 12), mat({ color: C.carbon, roughness: .5 }));
+    poste.position.set(px, PISO + alto / 2, pz); calesita.add(sombra(poste));
+    calesita.add(sombra(hiloTubo(helice(.085, PISO + .05, PISO + alto - .05, 22, a).map(v => v.add(new THREE.Vector3(px, 0, pz))), .018, PB[i % 6], 500)));
+  }
+
+  // ---------- Asientos: objetos dados vuelta, cada uno con respaldo ----------
+  function respaldo(color, g) {
+    const r = caja(.62, .62, .06, color, 0, .78, -.3); r.rotation.x = -.18; g.add(r);
+    [-.26, .26].forEach(x => g.add(caja(.05, .62, .05, C.carbon, x, .55, -.32)));
+  }
+  // silla dada vuelta: el asiento abajo con las patas al cielo; se sienta entre las patas, contra un respaldo nuevo
+  function sillaDadaVuelta(color) {
+    const g = new THREE.Group();
+    g.add(caja(.5, .42, .48, C.carbon, 0, .21, 0));
+    g.add(caja(.56, .06, .54, color, 0, .45, 0));
+    [[-.24, -.23], [.24, -.23], [-.24, .23], [.24, .23]].forEach(([x, z]) => g.add(caja(.045, .55, .045, color, x, .75, z)));
+    g.add(caja(.5, .04, .04, color, 0, 1.0, .23)); g.add(caja(.5, .04, .04, color, 0, 1.0, -.23));
+    const cojin = new THREE.Mesh(new THREE.CylinderGeometry(.2, .2, .08, 20), mat({ color: C.papel })); cojin.position.y = .52; g.add(cojin);
+    respaldo(color, g); return sombra(g);
+  }
+  // dedal dado vuelta: la boca hacia arriba, se vuelve un cuenco para sentarse adentro
+  function texDedal(col) {
+    const [c, x] = lienzo(256, 256); x.fillStyle = col; x.fillRect(0, 0, 256, 256);
+    x.fillStyle = 'rgba(0,0,0,.28)';
+    for (let j = 0; j < 12; j++) for (let i = 0; i < 16; i++) { x.beginPath(); x.arc(i * 16 + (j % 2) * 8 + 8, j * 20 + 10, 4.5, 0, TAU); x.fill(); }
+    const t = textura(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; return t;
+  }
+  function dedalDadoVuelta(color) {
+    const g = new THREE.Group(), perfil = [];
+    for (let k = 0; k <= 12; k++) { const t = k / 12; perfil.push(new THREE.Vector2(.18 + .3 * Math.sin(t * Math.PI / 2) + .04 * t, t * .62)); }
+    const cuenco = new THREE.Mesh(new THREE.LatheGeometry(perfil, 40), mat({ map: texDedal(color), side: THREE.DoubleSide, metalness: .3, roughness: .5 })); g.add(cuenco);
+    const fondo = new THREE.Mesh(new THREE.CircleGeometry(.4, 30), mat({ color: C.papel })); fondo.rotation.x = -Math.PI / 2; fondo.position.y = .4; g.add(fondo);
+    const aro = new THREE.Mesh(new THREE.TorusGeometry(.53, .035, 8, 40), mat({ color: C.carbon })); aro.rotation.x = Math.PI / 2; aro.position.y = .62; g.add(aro);
+    respaldo(color, g); g.children[g.children.length - 3].position.set(0, .95, -.5); return sombra(g);
+  }
+  // teléfono dado vuelta: el cuerpo patas arriba es el asiento, el tubo parado es el respaldo
+  function telefonoDadoVuelta(color) {
+    const g = new THREE.Group();
+    const cuerpo = new THREE.Mesh(new THREE.CylinderGeometry(.42, .3, .45, 6), mat({ color, roughness: .35 })); cuerpo.rotation.y = Math.PI / 6; cuerpo.position.y = .225; g.add(cuerpo);
+    const disco = new THREE.Mesh(new THREE.CylinderGeometry(.24, .24, .03, 32), mat({ color: C.papel })); disco.position.set(0, .47, 0); g.add(disco);
+    for (let k = 0; k < 10; k++) { const a = k / 10 * TAU * .8 + .6; const h = new THREE.Mesh(new THREE.CylinderGeometry(.03, .03, .035, 10), mat({ color: C.carbon })); h.position.set(Math.cos(a) * .16, .48, Math.sin(a) * .16); g.add(h); }
+    const tubo = new THREE.Group(); tubo.position.set(0, .2, -.42); tubo.rotation.x = -.15; g.add(tubo);
+    const mango = new THREE.Mesh(new THREE.CylinderGeometry(.07, .07, .9, 14), mat({ color, roughness: .35 })); mango.position.y = .55; tubo.add(mango);
+    [0, 1.05].forEach(y => { const cap = new THREE.Mesh(new THREE.CylinderGeometry(.15, .12, .14, 20), mat({ color, roughness: .35 })); cap.rotation.x = Math.PI / 2; cap.position.set(0, y + .05, .07); tubo.add(cap); });
+    const cable = helice(.04, .1, .9, 9, 0).map(v => new THREE.Vector3(v.x + .3, v.y * .5 + .05, v.z - .2)); g.add(hiloTubo(cable, .012, C.carbon, 200));
+    return sombra(g);
+  }
+  // espejo parado donde iría una silla
+  function espejoParado(tipo) {
+    const g = new THREE.Group();
+    const m = new THREE.Mesh(deformar(new THREE.PlaneGeometry(.75, 1.6, 10, 24), tipo, .75, 1.6), mEspejo); m.position.y = 1.05; g.add(m);
+    m.userData.padre = g;
+    g.add(caja(.85, .06, .06, C.oxido, 0, 1.88, 0)); g.add(caja(.85, .06, .06, C.oxido, 0, .24, 0));
+    [-.43, .43].forEach(x => g.add(caja(.05, 1.7, .05, C.oxido, x, 1.05, 0)));
+    g.add(caja(.9, .1, .45, C.carbon, 0, .05, 0));
+    return sombra(g);
+  }
+  // silla de hilo: un bastidor de madera y el asiento y el respaldo tejidos con cuerda de color
+  const mMad = mat({ color: '#C9A06C', roughness: .75 });
+  function liston(g, p, q, s) {
+    const L = p.distanceTo(q), m = new THREE.Mesh(new THREE.BoxGeometry(s, s, L), mMad);
+    m.position.copy(p).lerp(q, .5); m.lookAt(g.localToWorld ? q : q); g.add(m); m.lookAt(q.clone()); return m;
+  }
+  const cacheCuerdas = {};
+  function texCuerdas(color) {
+    if (cacheCuerdas[color]) return cacheCuerdas[color];
+    const [c, x] = lienzo(256, 64); x.clearRect(0, 0, 256, 64); x.fillStyle = color;
+    for (let i = 0; i < 18; i++) x.fillRect(4 + i * 14, 0, 6, 64);
+    const t = textura(c); cacheCuerdas[color] = t; return t;
+  }
+  function sillaDeHilo(color) {
+    const g = new THREE.Group(), P = (x, y, z) => new THREE.Vector3(x, y, z), W = .3;
+    const pts = { arriba: [-.62, 1.12], asientoAtras: [-.22, .36], asientoAdel: [.42, .5], pieAdel: [.32, .02], pieAtras: [-.12, .02], patinAtras: [-.42, .03], patinAdel: [.5, .03] };
+    const tramos = [['arriba', 'asientoAtras'], ['asientoAtras', 'asientoAdel'], ['asientoAdel', 'pieAdel'], ['asientoAtras', 'pieAtras'], ['patinAtras', 'patinAdel']];
+    [-W, W].forEach(x => tramos.forEach(([a, b]) => {
+      const p = P(x, pts[a][1], pts[a][0]), q = P(x, pts[b][1], pts[b][0]), L = p.distanceTo(q);
+      const m = new THREE.Mesh(new THREE.BoxGeometry(.045, .045, L), mMad); m.position.copy(p).lerp(q, .5); m.up.set(1, 0, 0); m.lookAt(q); g.add(m);
+    }));
+    ['arriba', 'asientoAtras', 'asientoAdel', 'patinAtras'].forEach(k => { const b = new THREE.Mesh(new THREE.BoxGeometry(2 * W + .045, .045, .045), mMad); b.position.set(0, pts[k][1], pts[k][0]); g.add(b); });
+    // cuerdas: del travesaño de arriba al de adelante del asiento, y del asiento atrás al patín (planos con cuerdas dibujadas)
+    const tex = texCuerdas(color);
+    const plano = (p, q) => {
+      const L = p.distanceTo(q), gp = new THREE.PlaneGeometry(2 * W - .04, L);
+      const m = new THREE.Mesh(gp, new THREE.MeshStandardMaterial({ map: tex, alphaTest: .5, side: THREE.DoubleSide, roughness: .9 }));
+      m.position.copy(p).lerp(q, .5); m.lookAt(q); m.rotateX(Math.PI / 2); g.add(m);
+    };
+    plano(P(0, pts.arriba[1], pts.arriba[0]), P(0, pts.asientoAdel[1], pts.asientoAdel[0]));
+    plano(P(0, pts.asientoAtras[1], pts.asientoAtras[0]), P(0, pts.patinAdel[1] + .02, pts.patinAdel[0] - .05));
+    return sombra(g);
+  }
+  // silla dada vuelta que cuelga del techo: te sentás sobre la parte de abajo del asiento
+  function silla(color) {
+    const s = new THREE.Group();
+    s.add(caja(.46, .05, .44, color, 0, .45, 0));
+    [[-.2, -.19], [.2, -.19], [-.2, .19], [.2, .19]].forEach(([x, z]) => s.add(caja(.04, .45, .04, color, x, .225, z)));
+    [-.2, .2].forEach(x => s.add(caja(.04, .52, .04, color, x, .71, -.2)));
+    s.add(caja(.44, .07, .03, color, 0, .78, -.2)); s.add(caja(.44, .07, .03, color, 0, .94, -.2));
+    return s;
+  }
+  const colgadasSillas = [];
+  function sillasColgantes(n, r, yAsiento, yTecho, desfase) {
+    for (let i = 0; i < n; i++) {
+      const b = (i + desfase) / n * TAU, cx = Math.cos(b) * r, cz = Math.sin(b) * r;
+      const puntas = yAsiento + .425, L = yTecho - puntas;
+      const piv = new THREE.Group(); piv.position.set(cx, yTecho, cz); piv.rotation.y = Math.atan2(-Math.cos(b), -Math.sin(b));
+      const ch = silla(PB[(i * 5 + 1) % 6]); ch.rotation.x = Math.PI; ch.position.y = -L + .45; piv.add(sombra(ch));
+      [[-.2, -.19], [.2, -.19], [-.2, .19], [.2, .19]].forEach(([x, z]) => {
+        const soga = new THREE.Mesh(new THREE.CylinderGeometry(.014, .014, L, 6), mat({ color: C.papel, roughness: 1 })); soga.position.set(x, -L / 2, z); piv.add(soga);
+      });
+      piv.userData.fase = i * .8 + r; piv.userData.asiento = yAsiento - yTecho; calesita.add(piv); colgadasSillas.push(piv);
+    }
+  }
+  sillasColgantes(10, 4.9, PISO + .62, Y2, 0);                    // planta baja: cuelgan del primer piso
+  sillasColgantes(10, 5.7, Y2 + .25 + .62, techoY(5.7), .5);      // primer piso: cuelgan del techo
+
+  // en el piso: sillas de hilo y espejos parados, alternados
+  const lugares = [];
+  function anillo(n, r, y, desfase, mirarAfuera) {
+    for (let i = 0; i < n; i++) {
+      const a = (i + desfase) / n * TAU;
+      const obj = i % 2 ? espejoParado(i % 4) : sillaDeHilo(PB[(i * 5 + Math.round(r)) % 6]);
+      obj.position.set(Math.cos(a) * r, y, Math.sin(a) * r);
+      obj.lookAt(Math.cos(a) * r * (mirarAfuera ? 2 : 0), y, Math.sin(a) * r * (mirarAfuera ? 2 : 0));
+      calesita.add(obj); lugares.push({ obj, espejo: i % 2 === 1 });
+    }
+  }
+
+  // ---------- Telas, telas cortadas e hilos que cuelgan y se mueven ----------
+  const colgadas = [];
+  function texTela(col, cortada) {
+    const [c, x] = lienzo(64, 256); x.fillStyle = col; x.fillRect(0, 0, 64, 256);
+    for (let y = 0; y < 256; y += 3) { x.fillStyle = 'rgba(255,255,255,.06)'; x.fillRect(0, y, 64, 1); }
+    if (cortada) { x.clearRect(0, 210, 64, 46); x.fillStyle = col; for (let k = 0; k < 8; k++) x.fillRect(k * 8 + 1, 210, 5, 20 + (k * 13 % 36)); }
+    return textura(c);
+  }
+  function colgar(r, a, yTop, largo, ancho, col, cortada) {
+    const piv = new THREE.Group(); piv.position.set(Math.cos(a) * r, yTop, Math.sin(a) * r); piv.rotation.y = -a + Math.PI / 2;
+    const g = new THREE.PlaneGeometry(ancho, largo, 4, 12); g.translate(0, -largo / 2, 0);
+    const p = g.attributes.position; for (let k = 0; k < p.count; k++) p.setZ(k, .08 * Math.sin(p.getY(k) * 2.4 + a * 3));
+    g.computeVertexNormals();
+    const t = new THREE.Mesh(g, mat({ map: texTela(col, cortada), side: THREE.DoubleSide, alphaTest: .5, roughness: 1 })); t.castShadow = true; piv.add(t);
+    piv.userData.fase = a * 5; calesita.add(piv); colgadas.push(piv);
+  }
+  // del borde del techo: telas largas y cortadas, por encima de la gente
+  for (let i = 0; i < 44; i++) { const a = i / 44 * TAU; colgar(8.4, a, techoY(8.4) - .1, techoY(8.4) - 4.9 - (i % 3) * .5, .45 + (i % 2) * .25, PB[i % 6], i % 3 === 1); }
+  // debajo del primer piso: retazos cortos sobre la planta baja
+  for (let i = 0; i < 28; i++) { const a = (i + .5) / 28 * TAU; colgar(5.1 + (i % 2) * .9, a, Y2, .6 + (i % 4) * .15, .35, PB[(i + 2) % 6], true); }
+  // hilos de colores con nudos, desde el cuenco del techo sobre el primer piso
+  for (let i = 0; i < 60; i++) {
+    const a = i / 60 * TAU + .05, r = 3.2 + (i % 5) * .65, y0 = techoY(r), y1 = Y2 + 2.5 + (i % 4) * .3;
+    calesita.add(hiloTubo([new THREE.Vector3(Math.cos(a) * r, y0, Math.sin(a) * r), new THREE.Vector3(Math.cos(a) * r, y1, Math.sin(a) * r)], .012, PB[i % 6], 4));
+    const nudo = new THREE.Mesh(new THREE.SphereGeometry(.05, 8, 6), mat({ color: PB[i % 6] })); nudo.position.set(Math.cos(a) * r, y1, Math.sin(a) * r); calesita.add(nudo);
+  }
+
+  // corona: una silla grande dada vuelta, patas al cielo
+  const corona = sombra(silla(C.oxido)); corona.rotation.x = Math.PI; corona.scale.setScalar(2.4); corona.position.y = ALTO + .95 * 2.4 + .2; calesita.add(corona);
+
+
+  // ---------- Gente (opcional): se sientan, se hamacan y se sacan fotos en los espejos ----------
+  const ROPA = ['#8C8780', '#A39D93', '#6F6A64', '#BDB5A8', '#5B5F66', '#7D746A', '#C9C0B2', '#4E4A46'], PANT = ['#3E3B38', '#5A554F', '#2F3238', '#4A4540'];
+  const mCara = mat({ color: '#D9C9B0' }), mCel = mat({ color: '#1F1C1E', roughness: .3 });
+  let nP = 0;
+  function cil(g, r0, r1, h, m, x, y, z, rx) { const c = new THREE.Mesh(new THREE.CylinderGeometry(r0, r1, h, 8), m); c.position.set(x, y, z); if (rx) c.rotation.x = rx; g.add(c); return c; }
+  function personaG(pose, alto) {
+    const g = new THREE.Group(), s = (alto || 1.7) / 1.7, mr = mat({ color: ROPA[nP % 8] }), mp = mat({ color: PANT[nP % 4] }); nP++;
+    if (pose === 'sentado') {
+      cil(g, .19, .15, .58, mr, 0, .32, -.05); const c = new THREE.Mesh(new THREE.SphereGeometry(.11, 12, 10), mCara); c.position.set(0, .74, -.05); g.add(c);
+      [-.09, .09].forEach(x => { cil(g, .075, .07, .45, mp, x, .04, .17, Math.PI / 2); cil(g, .065, .055, .42, mp, x, -.18, .4); });
+      [-.25, .25].forEach(x => cil(g, .05, .04, .5, mr, x, .3, .08, -.6));
+    } else {
+      cil(g, .19, .15, .58, mr, 0, 1.17, 0); const c = new THREE.Mesh(new THREE.SphereGeometry(.11, 12, 10), mCara); c.position.set(0, 1.6, 0); g.add(c);
+      [-.09, .09].forEach(x => cil(g, .075, .06, .86, mp, x, .43, 0));
+      cil(g, .05, .04, .62, mr, -.25, 1.15, 0);
+      if (pose === 'foto') {                         // brazo levantado con el celular, como sacándose una foto
+        cil(g, .05, .04, .55, mr, .2, 1.42, .22, -Math.PI / 2.3);
+        const cel = new THREE.Mesh(new THREE.BoxGeometry(.08, .15, .015), mCel); cel.position.set(.2, 1.52, .5); g.add(cel);
+      } else cil(g, .05, .04, .62, mr, .25, 1.15, 0);
+    }
+    g.scale.setScalar(s); g.visible = false; sombra(g); return g;
+  }
+  const gente = [];
+  let semilla = 41;
+  const rnd = () => { semilla = (semilla * 9301 + 49297) % 233280; return semilla / 233280; };
+  // en las sillas de hilo: sentados; frente a los espejos: sacándose una foto
+  lugares.forEach((L, i) => {
+    if (L.espejo) {
+      const p = personaG('foto', 1.55 + rnd() * .3); p.position.set(0, 0, 1.1); p.rotation.y = Math.PI; L.obj.add(p); gente.push(p);
+    } else if (i % 3 !== 2) {
+      const p = personaG('sentado'); p.position.set(0, .42, -.02); p.rotation.x = -.25; L.obj.add(p); gente.push(p);
+    }
+  });
+  // en las sillas que cuelgan: hamacándose
+  colgadasSillas.forEach((piv, i) => { if (i % 3 === 2) return; const p = personaG('sentado'); p.position.set(0, piv.userData.asiento + .02, 0); p.rotation.y = Math.PI; piv.add(p); gente.push(p); });
+  // en el núcleo de espejos de la planta baja y del primer piso
+  for (let k = 0; k < 16; k++) {
+    const a = k / 16 * TAU + .2, y = k % 2 ? Y2 + .25 : PISO, r = k % 2 ? 2.4 : 2.1;
+    if (k % 2 && a > A0 && a < A0 + AV) continue;
+    const p = personaG(k % 3 ? 'foto' : 'parado', 1.55 + rnd() * .3); p.position.set(Math.cos(a) * r, y, Math.sin(a) * r); p.lookAt(0, y, 0); calesita.add(p); gente.push(p);
+  }
+  // afuera: gente que camina alrededor y gente que le saca fotos a la calesita
+  const caminan = [];
+  for (let i = 0; i < 26; i++) {
+    const p = personaG('parado', 1.55 + rnd() * .35); scene.add(p); gente.push(p);
+    caminan.push({ p, a: rnd() * TAU, r: 9.2 + rnd() * 2.6, v: (.06 + rnd() * .05) * (rnd() < .5 ? 1 : -1), fase: rnd() * TAU });
+  }
+  for (let i = 0; i < 9; i++) {
+    const a = i / 9 * TAU + .3, r = 11.5 + rnd() * 2, p = personaG('foto', 1.55 + rnd() * .3);
+    p.position.set(Math.cos(a) * r, 0, Math.sin(a) * r); p.lookAt(0, 0, 0); scene.add(p); gente.push(p);
+  }
+  function moverCaminantes(dt) {
+    caminan.forEach(c => {
+      c.a += c.v * dt; c.p.position.set(Math.cos(c.a) * c.r, 0, Math.sin(c.a) * c.r);
+      c.p.rotation.y = -c.a + (c.v > 0 ? Math.PI : 0);
+    });
+  }
+  moverCaminantes(0);
+  let conGente = false;
+  const bG = document.getElementById('gente');
+  bG.addEventListener('click', () => {
+    conGente = !conGente; gente.forEach(p => p.visible = conGente);
+    bG.setAttribute('aria-pressed', String(conGente)); bG.textContent = conGente ? 'Con gente' : 'Sin gente';
+  });
+
+  // ---------- Hilo de algodón que entra desde fuera del cuadro ----------
+  const pIn = [];
+  for (let i = 0; i <= 160; i++) {
+    const t = i / 160, r = 16 * (1 - t * .45), a = -Math.PI * .25 + t * TAU * 1.6;
+    pIn.push(new THREE.Vector3(Math.cos(a) * r, .03 + Math.max(0, (t - .93) * 5), Math.sin(a) * r));
+  }
+  pIn.unshift(new THREE.Vector3(Math.cos(-Math.PI * .25) * 30, .03, Math.sin(-Math.PI * .25) * 30));
+  scene.add(sombra(hiloTubo(pIn, .035, '#F7F2E8', 1200)));
+
+  // ---------- Cámara: vistas ----------
+  const vistas = {
+    'v-frente': { p: [17, 6, 19], t: [0, 4, 0] },
+    'v-espejo': { p: [3.6, 1.65, 3.4], t: [0, 1.9, 0] },
+    'v-techo':  { p: [3.6, 4.9, 2.8], t: [-1, 9, -1] },
+    'v-aerea':  { p: [3, 32, 13], t: [0, 3, 0] },
+    'v-ras':    { p: [12, .35, 11], t: [0, 5, 0] },
+    'v-zootropo': { p: [5.4, 5.3, 1.2], t: [-4, 4.4, -2] },
+    'v-sillas': { p: [10.5, 1.7, 3.2], t: [5.2, 1.0, .4] }
+  };
+  let meta = null;
+  Object.keys(vistas).forEach(id => {
+    document.getElementById(id).addEventListener('click', () => {
+      document.querySelectorAll('[id^="v-"]').forEach(b => b.setAttribute('aria-pressed', String(b.id === id)));
+      meta = { p: new THREE.Vector3(...vistas[id].p), t: new THREE.Vector3(...vistas[id].t) };
+      if (reduce) { camera.position.copy(meta.p); controls.target.copy(meta.t); meta = null; }
+    });
+  });
+  controls.addEventListener('start', () => { meta = null; });
+
+  let girando = !reduce;
+  const bGirar = document.getElementById('girar');
+  function pintarGiro() { bGirar.setAttribute('aria-pressed', String(girando)); bGirar.textContent = girando ? 'Girando' : 'Quieta'; }
+  pintarGiro();
+  bGirar.addEventListener('click', () => { girando = !girando; pintarGiro(); });
+  document.getElementById('limpiar').addEventListener('click', () => document.body.classList.add('limpio'));
+  document.getElementById('mostrar').addEventListener('click', () => document.body.classList.remove('limpio'));
+  window.addEventListener('keydown', e => { if (e.key === 'h' || e.key === 'H') document.body.classList.toggle('limpio'); });
+
+  // ---------- Bucle ----------
+  function ajustar() {
+    const w = window.innerWidth, h = window.innerHeight;
+    renderer.setSize(w, h, false); camera.aspect = w / h;
+    camera.fov = w < 600 ? 55 : 42; camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', ajustar); ajustar();
+
+  const reloj = new THREE.Clock(); let cuadroN = 0, tiempo = 0;
+  function cuadro() {
+    const dt = Math.min(reloj.getDelta(), .05);
+    if (girando) {
+      calesita.rotation.y += dt * .2;
+      tiempo += dt;
+      colgadas.forEach(p => { p.rotation.x = .1 + Math.sin(tiempo * 1.3 + p.userData.fase) * .06; });
+      colgadasSillas.forEach(p => { p.rotation.z = Math.sin(tiempo * 1.1 + p.userData.fase) * .04; });   // con el giro, las telas se abren hacia afuera
+      corona.rotation.y -= dt * .4;
+    }
+    if (conGente && !reduce) moverCaminantes(dt);
+    if (meta) {
+      camera.position.lerp(meta.p, .06); controls.target.lerp(meta.t, .06);
+      if (camera.position.distanceTo(meta.p) < .02) meta = null;
+    }
+    controls.update();
+    if (camera.position.y < .25) camera.position.y = .25;
+    if (cuadroN++ % 2 === 0) { espejos.visible = false; camCubo.update(renderer, scene); espejos.visible = true; }
+    renderer.render(scene, camera);
+    requestAnimationFrame(cuadro);
+  }
+  cuadro();
+})();
+</script>
+
+</body></html>

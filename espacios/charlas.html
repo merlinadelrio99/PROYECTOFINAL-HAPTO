@@ -1,0 +1,482 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Charlas Bio Feria</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap">
+<style>@font-face{font-family:'Big Shoulders';src:url('../fonts/big-shoulders-variable-latin.woff2') format('woff2');font-weight:100 900;font-display:swap}
+@font-face{font-family:'Clash Display';src:url('../fonts/ClashDisplay-Variable.woff2') format('woff2');font-weight:200 700;font-display:swap}</style>
+<style>
+/* Layout: escena 3D a pantalla completa con luz de día; rótulos arriba y mandos abajo. El equilibrio: dos abanicos rígidos magenta y azul que se cruzan en violeta, madera cruda. */
+:root {
+  --papel: #F3F3F1;
+  --bordo: #931468;
+  --azul: #003B94;
+  --violeta: #A330B6;
+  --tinta: #1F1C1E;
+  --display: "Clash Display", "Big Shoulders", "Arial Black", system-ui, sans-serif;
+  --mono: "Big Shoulders", "Arial Narrow", system-ui, sans-serif;
+}
+html, body { height: 100%; }
+body { background: var(--papel); color: var(--tinta); overflow: hidden; font-family: var(--mono); }
+#escena { position: fixed; inset: 0; display: block; width: 100%; height: 100%; touch-action: none; }
+.rotulo {
+  position: fixed; top: 0; left: 0; right: 0;
+  padding-top: calc(14px + env(safe-area-inset-top, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; pointer-events: none;
+}
+.marca { font-family: var(--display); font-weight: 800; line-height: .82; font-size: clamp(26px, 4vw, 40px); color: var(--bordo); letter-spacing: -.02em; }
+.marca small { display: block; font-size: .42em; letter-spacing: .02em; font-weight: 500; }
+.ficha { text-align: right; font-size: 11px; line-height: 1.5; letter-spacing: .06em; text-transform: uppercase; }
+.ficha strong { display: block; font-family: var(--display); font-weight: 800; text-transform: none; letter-spacing: -.01em; font-size: clamp(20px, 3vw, 30px); line-height: 1; color: var(--violeta); margin-bottom: 4px; }
+.ficha .hilo { color: var(--azul); }
+.mandos {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between;
+}
+.grupo { display: flex; flex-wrap: wrap; gap: 6px; }
+button { font: 600 14px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; background: var(--papel); color: var(--bordo); border: 1.5px dashed var(--bordo); padding: 9px 12px; cursor: pointer; }
+button[aria-pressed="true"] { background: var(--bordo); color: var(--papel); border-style: solid; }
+button:hover { border-style: solid; }
+button:focus-visible { outline: 2px solid var(--azul); outline-offset: 2px; }
+.pista { font-size: 11px; opacity: .7; }
+#mostrar { position: fixed; right: max(12px, env(safe-area-inset-right, 0px)); bottom: calc(12px + env(safe-area-inset-bottom, 0px)); opacity: .35; font-size: 11px; padding: 6px 9px; }
+#mostrar:hover { opacity: 1; }
+body.limpio .rotulo, body.limpio .mandos { display: none; }
+body:not(.limpio) #mostrar { display: none; }
+@media (max-width: 520px) { .pista { display: none; } .ficha span { display: none; } }
+body.embebido .marca{display:none}
+</style>
+<script>if(location.search.indexOf("embed")>-1)document.documentElement.classList.add("emb");addEventListener("DOMContentLoaded",()=>{if(document.documentElement.classList.contains("emb"))document.body.classList.add("embebido")});</script>
+
+<canvas id="escena" aria-label="Modelo 3D del espacio de charlas y streaming de Bio Feria: dos abanicos de placas rígidas traslúcidas, uno magenta con el pivote bajo y otro azul con el pivote alto, que se cruzan en violeta sobre un escenario de madera con mesa larga, tres sillas y cámara; el público en bancos en filas con pasillo central, con las columnas y los pivotes espejados y, alrededor de seis columnas, mesas redondas con piedras para apilar buscando el equilibrio"></canvas>
+
+<header class="rotulo">
+  <div class="marca">BIO<small>FERIA</small></div>
+  <div class="ficha">
+    <strong>Charlas y streaming</strong>
+    <span>Espacio · El equilibrio<br></span>
+    <span class="hilo">Placas rígidas · madera</span><br>
+    9 al 11 de abril de 2027
+  </div>
+</header>
+
+<nav class="mandos" aria-label="Controles de la escena">
+  <div class="grupo" role="group" aria-label="Vistas">
+    <button id="v-45" aria-pressed="true">A 45°</button>
+    <button id="v-frente" aria-pressed="false">Desde el público</button>
+    <button id="v-cam" aria-pressed="false">Cámara de streaming</button>
+    <button id="v-mesa" aria-pressed="false">Desde la mesa</button>
+    <button id="v-aerea" aria-pressed="false">Cenital</button>
+    <button id="v-piedras" aria-pressed="false">Piedras</button>
+  </div>
+  <div class="grupo">
+    <button id="sol" aria-pressed="true">Recorrido del sol</button>
+    <button id="gente" aria-pressed="false">Sin gente</button>
+    <button id="limpiar">Ocultar textos</button>
+  </div>
+  <div class="pista">Arrastrá para mirar alrededor · rueda o pellizco para acercar</div>
+</nav>
+<button id="mostrar">Mostrar textos</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function () {
+  const C = { bordo:'#C2186B', azul:'#1C5BD6', madera:'#B98A5A', maderaOsc:'#8A6A44', crudo:'#E6DDCB', lana:'#D9C8A6', arpillera:'#B89A6A' };
+  const TAU = Math.PI * 2;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let semilla = 17;
+  const rnd = () => { semilla = (semilla * 9301 + 49297) % 233280; return semilla / 233280; };
+
+  const canvas = document.getElementById('escena');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.08;
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color('#E6EEF5');
+  scene.fog = new THREE.Fog('#DCE6E8', 40, 95);
+
+  const camera = new THREE.PerspectiveCamera(42, 1, 0.05, 200);
+  const controls = new THREE.OrbitControls(camera, canvas);
+  controls.enableDamping = true; controls.dampingFactor = .08;
+  controls.minDistance = 1.5; controls.maxDistance = 55;
+  controls.maxPolarAngle = Math.PI * .495;
+
+  scene.add(new THREE.HemisphereLight('#FFF4E2', '#8C9A6A', .8));
+  const SOLDIR = new THREE.Vector3(-.55, -1, -.6).normalize();     // hacia dónde va la luz
+  const sol = new THREE.DirectionalLight('#FFE6C2', 1.3);
+  sol.position.copy(SOLDIR.clone().multiplyScalar(-30));
+  sol.castShadow = true;
+  sol.shadow.mapSize.set(2048, 2048);
+  Object.assign(sol.shadow.camera, { left: -18, right: 18, top: 18, bottom: -18, near: 1, far: 80 });
+  sol.shadow.bias = -.0005;
+  scene.add(sol);
+
+  // ---------- Texturas ----------
+  function lienzo(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return [c, c.getContext('2d')]; }
+  function textura(c) { const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.anisotropy = renderer.capabilities.getMaxAnisotropy(); return t; }
+  function texSuelo() {                                   // pasto natural del predio
+    semilla = 5;
+    const S = 2048, [c, x] = lienzo(S, S);
+    x.fillStyle = '#6E8A3E'; x.fillRect(0, 0, S, S);
+    for (let i = 0; i < 9000; i++) { x.fillStyle = `rgba(${60 + rnd() * 60},${95 + rnd() * 60},${30 + rnd() * 30},${.25 + rnd() * .3})`; x.beginPath(); x.arc(rnd() * S, rnd() * S, 6 + rnd() * 26, 0, TAU); x.fill(); }
+    for (let i = 0; i < 60000; i++) { const px = rnd() * S, py = rnd() * S, l = 4 + rnd() * 9; x.strokeStyle = `rgba(${50 + rnd() * 90},${90 + rnd() * 80},${25 + rnd() * 35},${.35 + rnd() * .4})`; x.lineWidth = 1 + rnd(); x.beginPath(); x.moveTo(px, py); x.lineTo(px + (rnd() - .5) * 3, py - l); x.stroke(); }
+    const t = textura(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(10, 10); return t;
+  }
+  function texMadera(base) {
+    semilla = 31;
+    const W = 256, H = 512, [c, x] = lienzo(W, H);
+    x.fillStyle = base; x.fillRect(0, 0, W, H);
+    for (let i = 0; i < 70; i++) { x.strokeStyle = `rgba(70,45,20,${.06 + rnd() * .1})`; x.lineWidth = 1 + rnd() * 3; x.beginPath(); const px = rnd() * W; x.moveTo(px, 0); x.bezierCurveTo(px + 10, H * .3, px - 10, H * .6, px + 4, H); x.stroke(); }
+    const t = textura(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; return t;
+  }
+  function texArpillera() {
+    semilla = 8;
+    const S = 512, [c, x] = lienzo(S, S);
+    x.fillStyle = C.arpillera; x.fillRect(0, 0, S, S);
+    for (let y = 0; y < S; y += 6) { x.fillStyle = 'rgba(90,60,25,.18)'; x.fillRect(0, y, S, 2); }
+    for (let px = 0; px < S; px += 6) { x.fillStyle = 'rgba(255,240,210,.12)'; x.fillRect(px, 0, 2, S); }
+    const t = textura(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(4, 4); return t;
+  }
+  function texVoile() {
+    const S = 256, [c, x] = lienzo(S, S);
+    x.fillStyle = '#ffffff'; x.fillRect(0, 0, S, S);
+    for (let y = 0; y < S; y += 3) { x.fillStyle = 'rgba(0,0,0,.05)'; x.fillRect(0, y, S, 1); }
+    const t = textura(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(1, 10); return t;
+  }
+
+  const lin = h => new THREE.Color(h).convertSRGBToLinear();            // colores de la paleta tal cual se ven
+  const mat = (opt) => { if (typeof opt.color === 'string') opt.color = lin(opt.color); return new THREE.MeshStandardMaterial(Object.assign({ roughness: .9, metalness: 0 }, opt)); };
+  const V = (x, y, z) => new THREE.Vector3(x, y, z);
+  function sombra(o) { o.traverse(m => { if (m.isMesh) { m.castShadow = true; m.receiveShadow = true; } }); return o; }
+  const tMadera = texMadera(C.madera), tMaderaOsc = texMadera(C.maderaOsc);
+  const mMadera = mat({ map: tMadera, roughness: .85 }), mMaderaOsc = mat({ map: tMaderaOsc });
+  function caja(w, h, d, m, x, y, z, rot) {
+    const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m.isMaterial ? m : mat({ color: m, roughness: .8 }));
+    b.position.set(x, y, z); if (rot) b.rotation.y = rot; sombra(b); scene.add(b); return b;
+  }
+  function soga(a, b, radio, color, comba) {
+    const mid = a.clone().lerp(b, .5); mid.y -= comba || 0;
+    const curva = new THREE.QuadraticBezierCurve3(a, mid, b);
+    const m = new THREE.Mesh(new THREE.TubeGeometry(curva, 24, radio, 6, false), mat({ color, roughness: 1 }));
+    m.castShadow = true; scene.add(m); return m;
+  }
+  function estaca(p) { caja(.1, .45, .1, mMaderaOsc, p.x, .22, p.z); }
+
+  // ---------- Suelo ----------
+  const suelo = new THREE.Mesh(new THREE.PlaneGeometry(120, 120), mat({ map: texSuelo(), roughness: 1 }));
+  suelo.rotation.x = -Math.PI / 2; suelo.receiveShadow = true; scene.add(suelo);
+
+  // modelo en metros, el mismo de la planta v4: x = ancho, z = y de la planta − 5 (+z hacia el público)
+  const Z = y => y - 5;
+
+  // ---------- Escenario bajo el cruce ----------
+  const ST = { x0: -3.6, x1: 3.6, z0: Z(2.8), z1: Z(6.4), h: .3 };
+  const EW = ST.x1 - ST.x0, ED = ST.z1 - ST.z0, ECX = 0, ECZ = (ST.z0 + ST.z1) / 2;
+  for (let i = 0; i < 6; i++) for (let j = 0; j < 3; j++) {
+    const pw = EW / 6, pd = ED / 3, cx = ST.x0 + pw * (i + .5), cz = ST.z0 + pd * (j + .5);
+    [-pd * .38, 0, pd * .38].forEach(o => caja(pw * .96, .2, .14, mMaderaOsc, cx, .1, cz + o));
+  }
+  for (let k = 0; k < 24; k++) caja(EW, .06, ED / 24 * .86, k % 3 ? mMadera : mMaderaOsc, ECX, ST.h - .03, ST.z0 + ED / 24 * (k + .5));
+  const ALTO_ESC = ST.h;
+
+  // mesa larga de tablones sobre caballetes
+  const TW = 4, TD = .8, TCX = 0, TCZ = Z(4.8);
+  caja(TW, .06, TD, mMadera, TCX, ALTO_ESC + .76, TCZ);
+  [-TW / 2 + .35, TW / 2 - .35].forEach(x => {
+    [-1, 1].forEach(s => { const b = caja(.06, .8, .06, mMaderaOsc, x + s * .18, ALTO_ESC + .38, TCZ); b.rotation.z = s * .22; });
+    caja(.5, .05, TD * .8, mMaderaOsc, x, ALTO_ESC + .7, TCZ);
+  });
+  function silla(x, z, color) {
+    const m = mat({ color, roughness: .7 });
+    caja(.44, .05, .42, m, x, ALTO_ESC + .46, z);
+    [[-.19, -.18], [.19, -.18], [-.19, .18], [.19, .18]].forEach(([dx, dz]) => caja(.04, .46, .04, m, x + dx, ALTO_ESC + .23, z + dz));
+    caja(.44, .5, .04, m, x, ALTO_ESC + .74, z - .2);
+  }
+  const CZ = Z(3.85);
+  silla(-1.3, CZ, '#931468'); silla(0, CZ, C.crudo); silla(1.3, CZ, '#003B94');
+
+  // cámara de streaming en trípode
+  const kx = 4.4, kz = Z(7.0);
+  [[0, .3], [.26, -.15], [-.26, -.15]].forEach(([dx, dz]) => soga(V(kx + dx, 0, kz + dz), V(kx, 1.45, kz), .015, '#2B2B2B', 0));
+  const cam = caja(.3, .2, .18, '#2B2B2B', kx, 1.55, kz); cam.lookAt(TCX, 1.55, TCZ);
+  const lente = new THREE.Mesh(new THREE.CylinderGeometry(.06, .07, .12, 16), mat({ color: '#111' }));
+  lente.rotation.x = Math.PI / 2; cam.add(lente); lente.position.z = .14;
+
+  // ---------- Público: bancos en filas, pasillo central, sobre arpillera ----------
+  const tArp = texArpillera();
+  [[-5, -.8], [.8, 5]].forEach(([x0, x1]) => {
+    const alf = new THREE.Mesh(new THREE.PlaneGeometry(x1 - x0 + .8, 3.9), mat({ map: tArp, roughness: 1 }));
+    alf.rotation.x = -Math.PI / 2; alf.position.set((x0 + x1) / 2, .01, Z(9.8)); alf.receiveShadow = true; scene.add(alf);
+    [8.4, 9.6, 10.8].forEach(y => {
+      const bw = x1 - x0, bcx = (x0 + x1) / 2, bz = Z(y + .21);
+      caja(bw, .06, .42, mMadera, bcx, .43, bz);
+      [-bw / 2 + .35, bw / 2 - .35].forEach(o => caja(.35, .4, .38, mMaderaOsc, bcx + o, .2, bz));
+    });
+  });
+
+  // ---------- Los abanicos rígidos ----------
+  // magenta: pivote bajo que sube hacia el público · azul: pivote alto que baja. Las pendientes se compensan.
+  const FANS = [
+    { px: -6, pz: Z(0), a0: 10, a1: 70, L: 16, hp: 2.6, ht: 4.2, col: '#B0105E', tapa: '#931468' },
+    { px: 6, pz: Z(0), a0: 110, a1: 170, L: 16, hp: 6.2, ht: 4.6, col: '#0F47C2', tapa: '#003B94' }
+  ];
+  function texAlveolar() {
+    const S = 256, [c, x] = lienzo(S, S);
+    x.fillStyle = '#ffffff'; x.fillRect(0, 0, S, S);
+    for (let u = 0; u < S; u += 16) { x.fillStyle = 'rgba(0,0,0,.16)'; x.fillRect(u, 0, 2, S); x.fillStyle = 'rgba(255,255,255,.35)'; x.fillRect(u + 3, 0, 1, S); }
+    const t = textura(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; return t;
+  }
+  const tAlv = texAlveolar();
+  // losa: placa rígida con espesor a partir de sus 4 esquinas de arriba
+  function losa(top, esp, material, repU) {
+    const bot = top.map(p => p.clone().add(V(0, -esp, 0)));
+    const caras = [[top[0], top[1], top[2], top[3]], [bot[3], bot[2], bot[1], bot[0]],
+      [top[1], bot[1], bot[2], top[2]], [top[3], bot[3], bot[0], top[0]], [top[0], bot[0], bot[1], top[1]], [top[2], bot[2], bot[3], top[3]]];
+    const pos = [], uv = [];
+    caras.forEach(([a, b, c, d]) => {
+      [a, b, c, a, c, d].forEach(p => pos.push(p.x, p.y, p.z));
+      uv.push(0, 0, 0, 1, repU, 1, 0, 0, repU, 1, repU, 0);
+    });
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+    g.computeVertexNormals();
+    const m = new THREE.Mesh(g, material); scene.add(m); return m;
+  }
+  function liston(a, b, s, m) {
+    const largo = a.distanceTo(b);
+    const l = new THREE.Mesh(new THREE.BoxGeometry(s, s, largo), m);
+    l.position.copy(a).lerp(b, .5); l.lookAt(b); sombra(l); scene.add(l); return l;
+  }
+  // columnas y pivotes espejados: reflejan el pasto, el cielo y el color, y casi desaparecen
+  const cuboE = new THREE.WebGLCubeRenderTarget(256, { generateMipmaps: true, minFilter: THREE.LinearMipmapLinearFilter });
+  const camE = new THREE.CubeCamera(.1, 80, cuboE); camE.position.set(0, 2.2, 3); scene.add(camE);
+  const mEsp = mat({ color: '#FFFFFF', metalness: 1, roughness: .05, envMap: cuboE.texture });
+  const espejados = [];
+  const mesasPiedras = [];
+  const placas = [];
+  FANS.forEach(F => {
+    const mPlaca = new THREE.MeshPhysicalMaterial({ color: lin(F.col), map: tAlv, transparent: true, opacity: .42, side: THREE.DoubleSide, depthWrite: false, roughness: .15, metalness: 0, clearcoat: 1, clearcoatRoughness: .1, emissive: lin(F.col), emissiveIntensity: .18 });
+    const piv = V(F.px, F.hp, F.pz);
+    for (let k = 0; k < 7; k++) {
+      const ang = THREE.MathUtils.degToRad(F.a0 + (F.a1 - F.a0) * k / 6);
+      const d = V(Math.cos(ang), 0, Math.sin(ang)), n = V(-d.z, 0, d.x);
+      const tip = V(F.px + d.x * F.L, F.ht, F.pz + d.z * F.L);
+      const p0 = piv.clone().add(d.clone().multiplyScalar(.45));                 // la placa arranca fuera del eje
+      const w0 = .2, w1 = .75;
+      const top = [p0.clone().addScaledVector(n, w0), tip.clone().addScaledVector(n, w1), tip.clone().addScaledVector(n, -w1), p0.clone().addScaledVector(n, -w0)];
+      const pl = losa(top, .04, mPlaca, 1.5);
+      pl.renderOrder = 2; placas.push({ top, col: F.col });
+      // costilla de madera debajo de la placa y travesaño en la punta
+      liston(piv.clone().add(V(0, -.1, 0)), tip.clone().add(V(0, -.1, 0)), .1, mMadera);
+      liston(top[1].clone().add(V(0, -.08, 0)), top[2].clone().add(V(0, -.08, 0)), .07, mMaderaOsc);
+      // columna en la punta
+      const col = new THREE.Mesh(new THREE.CylinderGeometry(.09, .09, tip.y - .1, 20), mEsp);
+      col.position.set(tip.x, (tip.y - .1) / 2, tip.z); col.castShadow = true; scene.add(col); espejados.push(col);
+      caja(.3, .04, .3, mMaderaOsc, tip.x, .02, tip.z);
+      if (tip.y > 0) mesasPiedras.push(V(tip.x, 0, tip.z));
+    }
+    // poste del pivote, con riostras, y el eje: un disco de madera donde nacen todas las hojas
+    const pv = new THREE.Mesh(new THREE.BoxGeometry(.5, F.hp, .5), mEsp); pv.position.set(F.px, F.hp / 2, F.pz); pv.castShadow = true; scene.add(pv); espejados.push(pv);
+    const atras = F.px < 0 ? -1 : 1;
+    [[atras * 1.8, -1.2], [atras * 1.4, 1.6], [-atras * .6, -1.9]].forEach(([dx, dz]) => {
+      liston(V(F.px + dx, 0, F.pz + dz), V(F.px, F.hp * .62, F.pz), .12, mMaderaOsc);
+      caja(.3, .04, .3, mMaderaOsc, F.px + dx, .02, F.pz + dz);
+    });
+    const eje = new THREE.Mesh(new THREE.CylinderGeometry(.55, .55, .22, 32), mMadera);
+    eje.position.set(F.px, F.hp - .05, F.pz); sombra(eje); scene.add(eje);
+    const tapa = new THREE.Mesh(new THREE.CylinderGeometry(.3, .3, .12, 32), mat({ color: F.tapa, roughness: .7 }));
+    tapa.position.set(F.px, F.hp + .1, F.pz); sombra(tapa); scene.add(tapa);
+  });
+
+  // luz de color en el piso: lo que tiñe cada placa traslúcida con el sol (no hay luz artificial)
+  const tintes = placas.map(P => {
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(12), 3));
+    g.setIndex([0, 1, 2, 0, 2, 3]);
+    const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ color: lin(P.col), transparent: true, opacity: .32, depthWrite: false, side: THREE.DoubleSide }));
+    m.renderOrder = 1; scene.add(m); return { m, top: P.top };
+  });
+  function proyectar() {
+    tintes.forEach(T => {
+      const a = T.m.geometry.attributes.position;
+      T.top.forEach((p, i) => { const s = p.y / -SOLDIR.y; a.setXYZ(i, p.x + SOLDIR.x * s, .015, p.z + SOLDIR.z * s); });
+      a.needsUpdate = true; T.m.geometry.computeBoundingSphere();
+    });
+  }
+  sol.target.position.set(0, 0, 2); scene.add(sol.target);
+  function ponerSol(t) {
+    const az = -2.3 + Math.sin(t * .12) * .9;                 // el sol recorre el cielo despacio
+    SOLDIR.set(Math.cos(az) * .7, -1, Math.sin(az) * .7).normalize();
+    sol.position.copy(SOLDIR.clone().multiplyScalar(-30)).add(sol.target.position);
+    proyectar();
+  }
+  ponerSol(0);
+
+
+  // ---------- Móviles de lana en equilibrio, colgados bajo el cruce de los abanicos ----------
+  const mHiloM = mat({ color: '#E6DDCB', roughness: 1 }), mVar = mat({ color: '#8A6A44', roughness: .8 });
+  const LANAS = ['#931468', '#E19A00', '#003B94', '#A330B6', '#C15F2B', '#2C7486', '#F3F3F1'];
+  function texOvillo(col) {
+    const [c, x] = lienzo(128, 128); x.fillStyle = col; x.fillRect(0, 0, 128, 128);
+    for (let i = 0; i < 40; i++) { x.strokeStyle = `rgba(${i % 2 ? 255 : 0},${i % 2 ? 255 : 0},${i % 2 ? 255 : 0},.18)`; x.lineWidth = 2; x.beginPath(); x.moveTo(0, i * 6); x.bezierCurveTo(40, i * 6 - 20, 90, i * 6 + 20, 128, i * 6); x.stroke(); }
+    return textura(c);
+  }
+  const moviles = [];
+  let kOv = 0;
+  function cuelga(padre, y0, largo) { const h = new THREE.Mesh(new THREE.CylinderGeometry(.006, .006, largo, 4), mHiloM); h.position.y = y0 - largo / 2; padre.add(h); }
+  function ovillo(padre, x, y, r) {          // sin ovillos: en su lugar, un retazo de tela más grande
+    cuelga(padre, y, .2);
+    const t = new THREE.Mesh(new THREE.PlaneGeometry(r * 2.4, r * 3.4), mat({ color: LANAS[kOv++ % 7], side: THREE.DoubleSide, roughness: 1 })); t.position.set(x, y - .2 - r * 1.7, 0); padre.add(t); t.castShadow = true;
+  }
+  function retazo(padre, x, y) {
+    cuelga(padre, y, .2);
+    const t = new THREE.Mesh(new THREE.PlaneGeometry(.22, .34), mat({ color: LANAS[kOv++ % 7], side: THREE.DoubleSide, roughness: 1 })); t.position.set(x, y - .37, 0); padre.add(t);
+  }
+  // una varilla en equilibrio: el punto de cuelgue se corre hacia el lado más pesado
+  function varilla(nivel, largo) {
+    const g = new THREE.Group(), pesoIzq = nivel > 0 ? 1.6 : 1, a = largo * 1 / (1 + pesoIzq), b = largo - a;  // brazo corto del lado pesado
+    const v = new THREE.Mesh(new THREE.CylinderGeometry(.012, .012, largo, 6), mVar); v.rotation.z = Math.PI / 2; v.position.x = (b - a) / 2; g.add(v);
+    if (nivel > 0) { const hijo = varilla(nivel - 1, largo * .7); cuelga(g, 0, .3); hijo.position.set(-a, -.3, 0); g.add(hijo); hijo.userData.fase = nivel * 1.7; moviles.push(hijo); }
+    else ovillo(g, -a, 0, .07 + (kOv % 3) * .02);
+    if (nivel % 2) retazo(g, b, 0); else ovillo(g, b, 0, .09);
+    return g;
+  }
+  // cuelgan justo debajo de las placas magenta (las más bajas), así nunca las atraviesan
+  const altoMagenta = (x, z) => { const F = FANS[0]; return F.hp + (F.ht - F.hp) * Math.min(1, Math.hypot(x - F.px, z - F.pz) / F.L); };
+  // (sin móviles colgando)
+  function moverMoviles(t) { moviles.forEach(m => { m.rotation.y = Math.sin(t * .35 + m.userData.fase) * 1.2; m.rotation.z = Math.sin(t * .9 + m.userData.fase) * .03; }); }
+
+
+  // ---------- Buscar el equilibrio: mesas redondas alrededor de cada columna espejada, con piedras para apilar ----------
+  const mPiedra = [ '#8E8A84', '#A7A199', '#6F6B66', '#B9B2A6', '#7D7770' ].map(c => mat({ color: c, roughness: .95 }));
+  const PALM = ['#931468', '#E19A00', '#003B94', '#A330B6', '#C15F2B', '#2C7486'];
+  const mTablero = mat({ color: '#C9A06C', roughness: .8 });
+  let sp = 7; const rp = () => { sp = (sp * 9301 + 49297) % 233280; return sp / 233280; };
+  function piedra(r) {
+    const g = new THREE.SphereGeometry(r, 12, 9); g.scale(1, .45 + rp() * .2, .8 + rp() * .3);
+    const m = new THREE.Mesh(g, mPiedra[Math.floor(rp() * 5)]); m.castShadow = true; return m;
+  }
+  const lugaresPiedra = [];
+  // solo 6 mesas, repartidas entre los dos abanicos: las columnas 1, 3 y 5 de cada uno
+  const seis = mesasPiedras.filter((c, k) => [1, 3, 5, 8, 10, 12].includes(k));
+  seis.forEach((c, i) => {
+    const g = new THREE.Group(); g.position.copy(c); scene.add(g);
+    // tablero con un agujero por donde pasa la columna, y canto pintado de color
+    const f = new THREE.Shape(); f.absarc(0, 0, .75, 0, TAU, false); const h = new THREE.Path(); h.absarc(0, 0, .11, 0, TAU, true); f.holes.push(h);
+    const tab = new THREE.Mesh(new THREE.ExtrudeGeometry(f, { depth: .05, bevelEnabled: false, curveSegments: 40 }), [mTablero, mat({ color: PALM[i % 6], roughness: .6 })]);
+    tab.rotation.x = -Math.PI / 2; tab.position.y = .62; sombra(tab); g.add(tab);
+    [0, 1, 2].forEach(k => { const a = k / 3 * TAU + .4; const p = new THREE.Mesh(new THREE.CylinderGeometry(.03, .03, .62, 8), mTablero); p.position.set(Math.cos(a) * .55, .31, Math.sin(a) * .55); g.add(sombra(p)); });
+    // cuenco con piedras sueltas
+    const ang = i * 1.7, cb = V(Math.cos(ang) * .45, .67, Math.sin(ang) * .45);
+    const cuenco = new THREE.Mesh(new THREE.CylinderGeometry(.16, .11, .07, 20, 1, true), mat({ color: '#7A5A3A', side: THREE.DoubleSide })); cuenco.position.copy(cb).setY(.705); g.add(cuenco);
+    for (let k = 0; k < 6; k++) { const p = piedra(.035 + rp() * .025); p.position.set(cb.x + (rp() - .5) * .18, .7 + rp() * .03, cb.z + (rp() - .5) * .18); g.add(p); }
+    // torres que ya armó la gente
+    const torres = 1 + (i % 2);
+    for (let t = 0; t < torres; t++) {
+      const a = ang + Math.PI * (.6 + t * .7), tx = Math.cos(a) * .42, tz = Math.sin(a) * .42;
+      let y = .67; const n = 3 + Math.floor(rp() * 4);
+      for (let k = 0; k < n; k++) {
+        const r = .085 - k * .011 + rp() * .01, p = piedra(r);
+        const hh = r * (.45 + .1); p.position.set(tx + (rp() - .5) * .02, y + hh, tz + (rp() - .5) * .02); p.rotation.y = rp() * TAU; p.rotation.z = (rp() - .5) * .25; g.add(p);
+        y += hh * 2 * .9;
+      }
+    }
+    lugaresPiedra.push({ c, ang });
+  });
+
+  // ---------- Gente (opcional): quienes hablan en la mesa y el público en los bancos ----------
+  const ROPA = ['#8C8780', '#A39D93', '#6F6A64', '#BDB5A8', '#5B5F66', '#7D746A', '#C9C0B2', '#4E4A46'], PANT = ['#3E3B38', '#5A554F', '#2F3238', '#4A4540'];
+  const mCara = mat({ color: '#D9C9B0' }); let nP = 0;
+  function cil(g, r0, r1, h, m, x, y, z, rx) { const c = new THREE.Mesh(new THREE.CylinderGeometry(r0, r1, h, 8), m); c.position.set(x, y, z); if (rx) c.rotation.x = rx; g.add(c); }
+  function persona(sentado) {
+    const g = new THREE.Group(), mr = mat({ color: ROPA[nP % 8] }), mp = mat({ color: PANT[nP % 4] }); nP++;
+    const c = new THREE.Mesh(new THREE.SphereGeometry(.11, 12, 10), mCara);
+    if (sentado) {
+      cil(g, .19, .15, .58, mr, 0, .32, -.05); c.position.set(0, .74, -.05);
+      [-.09, .09].forEach(x => { cil(g, .075, .07, .45, mp, x, .04, .17, Math.PI / 2); cil(g, .065, .055, .44, mp, x, -.2, .4); });
+      [-.25, .25].forEach(x => cil(g, .05, .04, .5, mr, x, .3, .08, -.6));
+    } else {
+      cil(g, .19, .15, .58, mr, 0, 1.17, 0); c.position.set(0, 1.6, 0);
+      [-.09, .09].forEach(x => cil(g, .075, .06, .86, mp, x, .43, 0)); [-.25, .25].forEach(x => cil(g, .05, .04, .62, mr, x, 1.15, 0));
+    }
+    g.add(c); sombra(g); g.visible = false; scene.add(g); return g;
+  }
+  const gente = [];
+  [-1.3, 0, 1.3].forEach(x => { const p = persona(true); p.position.set(x, ALTO_ESC + .46, CZ); gente.push(p); });
+  [8.4, 9.6, 10.8].forEach((y, r) => [[-5, -.8], [.8, 5]].forEach(([x0, x1]) => {
+    for (let x = x0 + .3; x < x1 - .2; x += .55) { if ((x * 7 + r) % 5 < 1) continue; const p = persona(true); p.position.set(x, .46, Z(y + .21)); p.rotation.y = Math.PI; gente.push(p); }
+  }));
+  [[-6.5, Z(12.5)], [6.2, Z(12.8)], [-7, Z(8)], [7.2, Z(9.5)], [5.6, Z(6.8)], [-5.8, Z(5.5)], [.2, Z(13)]].forEach(([x, z], i) => { const p = persona(false); p.position.set(x, 0, z); p.rotation.y = i * 1.3; gente.push(p); });
+  // alrededor de algunas mesas, gente apilando piedras
+  lugaresPiedra.forEach((L, i) => {
+    if (i % 2) return;
+    const a = L.ang + Math.PI + .3, p = persona(false); p.position.set(L.c.x + Math.cos(a) * 1.15, 0, L.c.z + Math.sin(a) * 1.15); p.lookAt(L.c.x, 0, L.c.z); gente.push(p);
+  });
+  let conGente = false;
+  const bG = document.getElementById('gente');
+  bG.addEventListener('click', () => { conGente = !conGente; gente.forEach(p => p.visible = conGente); bG.setAttribute('aria-pressed', String(conGente)); bG.textContent = conGente ? 'Con gente' : 'Sin gente'; });
+
+  // ---------- Cámara ----------
+  const vistas = {
+    'v-45':    { p: [-16, 12, 17], t: [0, 2.4, 2] },
+    'v-frente':{ p: [0, 1.3, 12.5], t: [0, 3.2, -1] },
+    'v-cam':   { p: [kx - .1, 1.6, kz + .35], t: [TCX, 1.2, TCZ] },
+    'v-mesa':  { p: [0, ALTO_ESC + 1.25, CZ - .1], t: [0, 3.6, 8] },
+    'v-aerea': { p: [0, 34, 4.5], t: [0, 0, 2] },
+    'v-piedras': { p: [-2.6, 1.9, Z(10.8)], t: [-6.5, .6, Z(8.2)] }
+  };
+  camera.position.set(...vistas['v-45'].p); controls.target.set(...vistas['v-45'].t);
+  let meta = null;
+  Object.keys(vistas).forEach(id => {
+    document.getElementById(id).addEventListener('click', () => {
+      document.querySelectorAll('[id^="v-"]').forEach(b => b.setAttribute('aria-pressed', String(b.id === id)));
+      meta = { p: V(...vistas[id].p), t: V(...vistas[id].t) };
+      if (reduce) { camera.position.copy(meta.p); controls.target.copy(meta.t); meta = null; }
+    });
+  });
+  controls.addEventListener('start', () => { meta = null; });
+  let solMueve = !reduce;
+  const bS = document.getElementById('sol');
+  bS.setAttribute('aria-pressed', String(solMueve));
+  bS.addEventListener('click', () => { solMueve = !solMueve; bS.setAttribute('aria-pressed', String(solMueve)); });
+  document.getElementById('limpiar').addEventListener('click', () => document.body.classList.add('limpio'));
+  document.getElementById('mostrar').addEventListener('click', () => document.body.classList.remove('limpio'));
+  window.addEventListener('keydown', e => { if (e.key === 'h' || e.key === 'H') document.body.classList.toggle('limpio'); });
+
+  function ajustar() {
+    const w = window.innerWidth, h = window.innerHeight;
+    renderer.setSize(w, h, false); camera.aspect = w / h;
+    camera.fov = w < 600 ? 60 : 44; camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', ajustar); ajustar();
+
+  const reloj = new THREE.Clock(); let tiempo = 0, tMov = 0, nCuadro = 0;
+  function cuadro() {
+    const dt = Math.min(reloj.getDelta(), .05);
+    if (solMueve) { tiempo += dt; ponerSol(tiempo); }
+    tMov += reduce ? 0 : dt; moverMoviles(tMov);
+    if (nCuadro++ % 3 === 0) { espejados.forEach(m => m.visible = false); camE.update(renderer, scene); espejados.forEach(m => m.visible = true); }
+    if (meta) {
+      camera.position.lerp(meta.p, .06); controls.target.lerp(meta.t, .06);
+      if (camera.position.distanceTo(meta.p) < .02) meta = null;
+    }
+    controls.update();
+    renderer.render(scene, camera);
+    requestAnimationFrame(cuadro);
+  }
+  cuadro();
+})();
+</script>
+
+</body></html>
