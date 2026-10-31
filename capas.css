@@ -1,0 +1,276 @@
+/* Bioferia 2027 · capas dinámicas (se suman a styles.css, oculto.css y refine.css sin cambiar textos) */
+@font-face{font-family:'Big Shoulders';src:url('fonts/big-shoulders-variable-latin.woff2') format('woff2');font-weight:100 900;font-display:swap}
+@font-face{font-family:'Clash Display Local';src:url('fonts/ClashDisplay-Variable.woff2') format('woff2');font-weight:200 700;font-display:swap}
+:root{
+  --oculto:#003B94;--tension:#A330B6;--giro:#C15F2B;--pista:#028EA5;--equilibrio:#C2186B;--revelacion:#E19A00;
+  --tinta:#1F1C1E;--papel:#F3F3F1;
+  --display:'Clash Display','Clash Display Local','Big Shoulders',Arial,sans-serif;
+  --f-poster:'Big Shoulders',Impact,sans-serif;
+}
+html.bf-cerrado{overflow:hidden}
+h1,h2,h3,h4{font-family:var(--display)}
+.hero h1{font-family:var(--display);font-weight:600;letter-spacing:-.035em}
+
+/* ---------- nav azul con logo + tagline ---------- */
+.site-header{background:var(--oculto)!important;border-bottom:3px solid var(--revelacion)!important}
+.logo-link{display:flex!important;align-items:center;gap:14px}
+.logo-link img,.footer-logo img{filter:none!important;mix-blend-mode:normal!important}
+.logo-link img:first-child{height:44px;width:auto}
+.bf-slogan{height:44px;width:auto;transition:transform .3s}
+.logo-link:hover .bf-slogan{transform:rotate(-2deg) scale(1.04)}
+.footer-logo{display:flex!important;align-items:center;gap:14px}
+.footer-logo img:first-child{height:54px;width:auto}
+.footer-logo .bf-slogan{height:46px}
+.primary-nav a{position:relative}
+.primary-nav a:not(.nav-ticket)::after{content:'';position:absolute;left:0;right:0;bottom:-4px;height:2px;background:repeating-linear-gradient(90deg,var(--revelacion) 0 6px,transparent 6px 10px);transform:scaleX(0);transform-origin:left;transition:transform .35s}
+.primary-nav a:hover::after{transform:scaleX(1)}
+.primary-nav .nav-ticket{background:var(--revelacion)!important;color:var(--tinta)!important}
+@media(max-width:600px){.logo-link img:first-child{height:34px}.bf-slogan{height:30px}}
+
+/* ---------- color por subconcepto: cada sección redefine el azul de la web ---------- */
+.bf-sec{position:relative;isolation:isolate;overflow:hidden}
+[data-sub=oculto]{--blue:var(--oculto);--sc:var(--oculto)}
+[data-sub=tension]{--blue:var(--tension);--sc:var(--tension);--wine:var(--tension)}
+[data-sub=giro]{--blue:var(--giro);--sc:var(--giro);--wine:var(--giro)}
+[data-sub=pista]{--blue:#00707F;--sc:var(--pista);--wine:var(--pista)}
+[data-sub=equilibrio]{--blue:var(--equilibrio);--sc:var(--equilibrio);--wine:var(--equilibrio)}
+[data-sub=revelacion]{--blue:var(--tinta);--sc:var(--revelacion)}
+.bf-fondo{position:absolute;inset:-12% 0;z-index:-2;background:center/cover no-repeat;opacity:.2;filter:saturate(1.2);will-change:transform;pointer-events:none}
+.bf-fondo::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%,var(--paper,#f7f5f0) 25%,transparent 75%)}
+#como-llegar .bf-fondo,#app .bf-fondo{opacity:.32;mix-blend-mode:luminosity}
+#como-llegar .bf-fondo::after,#app .bf-fondo::after{background:none}
+#app{background:var(--giro)!important}
+#entradas{background:var(--revelacion)!important}
+#entradas .bf-fondo{opacity:.28;mix-blend-mode:multiply}
+#entradas .bf-fondo::after{background:none}
+#impacto .bf-fondo{opacity:.14}
+.bf-tira{position:absolute;left:0;right:0;top:0;height:10px;z-index:3;background:var(--sc);-webkit-mask:var(--torn-a) bottom/100% 100% no-repeat;mask:var(--torn-a) bottom/100% 100% no-repeat;transform:scaleY(-1);pointer-events:none}
+.bf-sec .section-index{color:var(--sc)!important;border-color:var(--sc)!important}
+#entradas .section-index,#app .small-label{color:var(--tinta)!important}
+.bf-sec h2 em{color:var(--sc)}
+#app h2 em,#entradas h2 em{color:var(--tinta)}
+#como-llegar h2 em,#app h2 em{color:var(--revelacion)}
+
+/* aparecer */
+.bf-js .bf-aparece{opacity:0;transform:translateY(34px);transition:opacity .8s cubic-bezier(.2,.7,.2,1) var(--d,0ms),transform .8s cubic-bezier(.2,.7,.2,1) var(--d,0ms)}
+.bf-js .bf-aparece.bf-in{opacity:1;transform:none}
+.bf-cosido{background:linear-gradient(currentColor,currentColor) left 96%/0 3px no-repeat;transition:background-size 1.2s cubic-bezier(.6,0,.2,1) .3s;padding-bottom:.04em}
+.bf-in .bf-cosido,.bf-cosido.bf-in{background-size:100% 3px}
+@media(prefers-reduced-motion:reduce){.bf-js .bf-aparece{opacity:1;transform:none;transition:none}.bf-cosido{background-size:100% 3px}}
+
+/* concepto: cada momento con su color */
+.concept-grid li{transition:background .35s,color .35s}
+.concept-grid li.is-active{background:var(--c)!important;color:#fff!important}
+.concept-grid li:hover{box-shadow:inset 0 -6px 0 var(--c)}
+.bf-ir{position:relative;z-index:3;display:inline-block;margin-top:10px;font:700 15px var(--f-poster);letter-spacing:.06em;text-transform:uppercase;color:inherit;opacity:0;transition:opacity .3s}
+.concept-grid li.is-active .bf-ir,.concept-grid li:hover .bf-ir{opacity:1}
+
+/* ---------- puerta (intro con hilo) ---------- */
+.puerta{position:fixed;inset:0;z-index:200;overflow:hidden;--gr:clamp(16px,4vw,48px)}
+.puerta.gone{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .6s,visibility 0s .6s}
+.puerta.open{pointer-events:none}
+.puerta.open .skip{pointer-events:auto}
+#scene{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:2;pointer-events:none}
+.puerta.closed{cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.puerta.closed.dragging{cursor:grabbing}
+.puerta-marca{position:absolute;z-index:4;left:50%;top:clamp(20px,6vh,60px);transform:translateX(-50%);display:flex;align-items:center;gap:16px;background:var(--oculto);padding:14px 18px;box-shadow:6px 6px 0 var(--revelacion);pointer-events:none;transition:opacity .5s,transform .5s}
+.puerta-marca img:first-child{height:clamp(40px,6vw,68px)}
+.puerta-marca img:last-child{height:clamp(40px,5.8vw,66px)}
+.puerta.open .puerta-marca{opacity:0;transform:translate(-50%,-20px)}
+.meter{position:absolute;z-index:3;left:50%;bottom:calc(26px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(360px,calc(100% - 32px));background:var(--papel);padding:12px 18px;box-shadow:0 10px 30px rgba(20,20,20,.22);text-align:center;transition:opacity .6s ease .9s,transform .6s ease .9s}
+.phrase{font:700 26px/1.1 var(--display);margin:0 0 12px;min-height:1.1em}
+.ruler{position:relative;height:16px;border-bottom:2px solid var(--tinta);background:repeating-linear-gradient(90deg,var(--tinta) 0 1.5px,transparent 1.5px 20px) left bottom/100% 6px no-repeat}
+.zone{position:absolute;bottom:0;top:-2px;background:color-mix(in srgb,var(--revelacion) 55%,transparent)}
+.dot{position:absolute;bottom:-7px;left:0;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--tinta)}
+.dot i{position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--revelacion);transform:scale(0);opacity:0}
+.ruler-labels{position:relative;height:16px;margin-top:8px;font:600 13px var(--f-poster);letter-spacing:.08em;text-transform:uppercase;color:#5c5a55}
+.ruler-labels span{position:absolute;top:0}.ruler-labels span:first-child{left:0}.ruler-labels span:last-child{right:0}
+.ruler-labels .j{transform:translateX(-50%);color:var(--tinta)}
+.skip{position:absolute;z-index:5;bottom:calc(30px + env(safe-area-inset-bottom,0px));right:var(--gr);font:700 16px var(--f-poster);letter-spacing:.06em;text-transform:uppercase;padding:9px 12px 8px;background:var(--papel);border:2px solid var(--tinta);cursor:pointer}
+.skip:hover{background:var(--revelacion);border-color:var(--revelacion)}
+.hint{position:absolute;z-index:3;left:0;top:0;width:78px;height:78px;margin:-39px 0 0 -39px;display:grid;place-items:center;pointer-events:none;font:700 18px var(--f-poster);color:var(--papel);transition:opacity .4s}
+.hint::before{content:"";position:absolute;inset:0;border-radius:50%;border:2px dashed var(--papel);animation:bfpulse 1.8s ease-in-out infinite}
+@keyframes bfpulse{50%{transform:scale(1.15);opacity:.5}}
+.puerta.open .meter{opacity:0;transform:translate(-50%,16px);pointer-events:none}
+.puerta.open .hint{opacity:0!important}
+.puerta.nogl #scene,.puerta.nogl .meter,.puerta.nogl .hint{display:none}
+@media(max-width:700px){.skip{bottom:auto;top:calc(16px + env(safe-area-inset-top,0px))}.puerta-marca{top:70px}}
+
+/* ---------- hilo de progreso ---------- */
+.hilo{position:fixed;z-index:40;left:max(10px,env(safe-area-inset-left,0px));top:140px;bottom:24px;width:24px;pointer-events:none}
+.hilo svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.hilo .base{fill:none;stroke:rgba(31,28,30,.28);stroke-width:2;stroke-dasharray:9 7}
+.hilo .live{fill:none;stroke:var(--revelacion);stroke-width:3.2;stroke-linecap:round}
+.hilo a{position:absolute;left:12px;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:var(--papel);border:2.5px solid var(--tinta);pointer-events:auto;text-decoration:none;transition:transform .25s,background .25s}
+.hilo a.on{background:var(--c);transform:scale(1.3)}
+.hilo a span{position:absolute;left:24px;top:50%;transform:translateY(-50%);white-space:nowrap;font:700 15px var(--f-poster);letter-spacing:.05em;text-transform:uppercase;background:var(--tinta);color:var(--papel);padding:4px 8px 3px;opacity:0;pointer-events:none;transition:opacity .2s}
+.hilo a:hover span,.hilo a:focus-visible span{opacity:1}
+.hilo a.on span{background:var(--c)}
+@media(max-width:899px){
+  .hilo{left:0;right:0;width:auto;top:auto;bottom:0;height:14px;background:color-mix(in srgb,var(--papel) 85%,transparent)}
+  .hilo a{top:7px;left:0;width:12px;height:12px;margin:-6px 0 0 -6px;border-width:2px}
+  .hilo a span{display:none}
+}
+@media(min-width:900px){main .section-pad{padding-left:max(64px,clamp(24px,5.2vw,90px))}}
+
+/* ---------- toast ---------- */
+.wtoast{position:fixed;z-index:300;left:50%;bottom:calc(26px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;max-width:min(520px,calc(100% - 32px));background:var(--tinta);color:var(--papel);padding:12px 16px;font:600 18px/1.25 var(--f-poster);letter-spacing:.02em;box-shadow:5px 5px 0 var(--revelacion);transition:.35s;pointer-events:none}
+.wtoast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- botones y bloques de juego ---------- */
+.bf-btn{font:700 17px var(--f-poster);letter-spacing:.06em;text-transform:uppercase;background:var(--sc,var(--oculto));color:#fff;border:2px solid var(--sc,var(--oculto));padding:10px 14px 9px;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.bf-btn:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--tinta)}
+.bf-btn:disabled{opacity:.4;pointer-events:none}
+.bf-btn.ghost{background:transparent;color:var(--tinta);border-color:var(--tinta)}
+.bf-juego{margin-top:clamp(40px,5vw,70px);background:var(--papel);border:2px solid var(--tinta);box-shadow:10px 10px 0 var(--sc);padding:clamp(18px,3vw,36px);position:relative}
+.bf-juego::before{content:'';position:absolute;left:-2px;right:-2px;top:-12px;height:12px;background:var(--papel);-webkit-mask:var(--torn-b) bottom/100% 100% no-repeat;mask:var(--torn-b) bottom/100% 100% no-repeat}
+.bf-juego-head h3{font-size:clamp(34px,4vw,58px);margin:4px 0 8px;line-height:1}
+.bf-juego-head p{max-width:560px;margin:0 0 14px}
+.bf-n{display:inline-block;font:800 15px var(--f-poster);letter-spacing:.1em;background:var(--sc);color:#fff;padding:3px 8px 2px}
+#entradas .bf-n{color:#fff;background:var(--tinta)}
+
+/* juego 1 · clavija */
+.bf-clavija-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:28px;align-items:stretch}
+.bf-cuerda{position:relative;min-height:280px;border:1px dashed color-mix(in srgb,var(--tinta) 40%,transparent);background:repeating-linear-gradient(0deg,transparent 0 23px,rgba(163,48,182,.07) 23px 24px)}
+.bf-cuerda canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:pointer}
+.bf-range{position:absolute;left:12px;top:10px;display:flex;align-items:center;gap:8px;font:700 14px var(--f-poster);text-transform:uppercase;letter-spacing:.06em}
+.bf-range input{accent-color:var(--tension);width:150px}
+.bf-plan .bf-lvl{font:800 16px var(--f-poster);letter-spacing:.1em;text-transform:uppercase;color:var(--tension);margin:0}
+.bf-plan h4{font-size:30px;margin:2px 0 12px}
+.bf-plan ol{list-style:none;padding:0;margin:0 0 16px;display:grid;gap:6px;min-height:120px}
+.bf-plan li{display:flex;gap:12px;align-items:baseline;border-bottom:1px solid #cfcbc1;padding:5px 0;animation:bfentra .4s both}
+.bf-plan li span{font:800 15px var(--f-poster);color:#fff;background:var(--tension);padding:1px 6px}
+.bf-plan li b{font:600 22px var(--f-poster)}
+.bf-plan li.vacio{border:0;font-size:17px;color:#5c5a55}
+@keyframes bfentra{from{opacity:0;transform:translateX(-10px)}}
+.agenda-days button.bf-en-plan{position:relative}
+.agenda-days button.bf-en-plan::after{content:attr(data-plan);position:absolute;top:6px;right:8px;width:22px;height:22px;border-radius:50%;background:var(--revelacion);color:var(--tinta);font:800 14px/22px var(--f-poster);text-align:center}
+.agenda-list article{transition:transform .3s,box-shadow .3s}
+.agenda-list article.bf-en-plan{box-shadow:inset 6px 0 0 var(--tension)}
+.agenda-list article.bf-hoy{transform:translateY(-4px);box-shadow:inset 6px 0 0 var(--tension),0 10px 0 -4px var(--revelacion)}
+.bf-chip-plan{display:inline-block;margin-top:10px;font:800 14px var(--f-poster)!important;font-style:normal!important;letter-spacing:.06em;background:var(--tension);color:#fff!important;padding:3px 8px}
+
+/* juego 2 · rueda */
+.bf-rueda{display:grid;grid-template-columns:1fr minmax(260px,460px);gap:30px;align-items:center}
+.bf-rueda-stage{position:relative;aspect-ratio:1}
+.bf-rueda-stage canvas{width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+.bf-aguja{position:absolute;left:50%;top:-14px;width:0;height:0;margin-left:-14px;border:14px solid transparent;border-top:30px solid var(--tinta);filter:drop-shadow(2px 2px 0 var(--revelacion))}
+.bf-rueda-res{font:600 22px var(--f-poster);min-height:1.3em;margin-top:12px}
+.bf-rueda-res b{background:var(--revelacion);padding:0 6px}
+
+/* experiencias: entrar en 3D */
+.experience-card{position:relative}
+.experience-card img{transition:transform .8s cubic-bezier(.2,.7,.2,1),filter .5s}
+.experience-card:hover img{transform:scale(1.07) rotate(-.6deg)}
+.bf-entrar3d{position:absolute;z-index:4;right:12px;top:12px;font:800 16px var(--f-poster);letter-spacing:.06em;text-transform:uppercase;background:var(--papel);color:var(--tinta);border:2px solid var(--tinta);padding:7px 10px 6px;cursor:pointer;box-shadow:4px 4px 0 var(--sc);transition:transform .2s}
+.bf-entrar3d:hover{transform:translate(-2px,-2px) rotate(-2deg);background:var(--revelacion)}
+
+/* ---------- La pista: merch detrás de la chapa perforada ---------- */
+#mapa{background:#0c5b66!important}
+.bf-chapa-wrap{position:absolute;inset:0;z-index:-2;overflow:hidden;--mx:-400px;--my:-400px}
+.bf-merch{position:absolute;inset:-2%;display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:minmax(180px,1fr);gap:0;filter:saturate(1.1)}
+.bf-merch img{width:100%;height:100%;object-fit:cover;display:block}
+.bf-chapa{position:absolute;inset:0;background:linear-gradient(135deg,#0a8fa3,#04606d);
+  -webkit-mask:radial-gradient(circle at var(--mx) var(--my),transparent 0 110px,#000 170px),radial-gradient(circle,transparent 0 6.5px,#000 7.5px) 0 0/21px 21px;
+  -webkit-mask-composite:source-in;mask:radial-gradient(circle at var(--mx) var(--my),transparent 0 110px,#000 170px),radial-gradient(circle,transparent 0 6.5px,#000 7.5px) 0 0/21px 21px;mask-composite:intersect}
+#mapa .section-index,#mapa .section-heading h2,#mapa .section-heading p{color:#fff!important;border-color:#fff!important}
+#mapa .section-heading h2 em{color:var(--revelacion)}
+#mapa .section-heading{background:rgba(4,72,82,.82);padding:18px 22px;backdrop-filter:blur(3px);max-width:max-content}
+#mapa .map-image-footer{background:var(--papel);padding:8px 12px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.bf-contador{font:700 18px var(--f-poster);letter-spacing:.04em}
+.bf-contador b{background:var(--revelacion);padding:0 6px}
+.bf-costura{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;overflow:visible}
+.bf-costura .h{fill:none;stroke:var(--revelacion);stroke-width:4;stroke-linecap:round;filter:drop-shadow(1px 2px 0 rgba(0,0,0,.35))}
+.bf-costura .p{fill:none;stroke:#fff;stroke-width:1.6;stroke-dasharray:7 6}
+.map-pin{z-index:2}
+.map-pin.bf-cosido{background:var(--revelacion)!important;color:var(--tinta)!important;box-shadow:3px 3px 0 var(--tinta)!important}
+.map-pin:hover{transform:translate(-50%,-50%) scale(1.15)}
+.bf-map3d{margin:16px 0 4px}
+
+/* ---------- 3D ---------- */
+.bf3d{width:min(1280px,calc(100vw - 24px));height:min(860px,calc(100svh - 24px));max-height:none;padding:0;border:3px solid var(--tinta);background:var(--papel);display:none;flex-direction:column}
+.bf3d[open]{display:flex}
+.bf3d-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:10px 14px;background:var(--oculto);color:#fff}
+.bf3d-bar h3{margin:0;font-size:clamp(22px,2.4vw,32px);color:#fff}
+.bf3d-sub{font:800 15px var(--f-poster);letter-spacing:.1em;background:var(--revelacion);color:var(--tinta);padding:2px 8px}
+.bf3d-btns{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.bf3d-btns .ghost{color:#fff;border-color:#fff}
+.bf3d iframe{flex:1;width:100%;border:0;background:#e6eef5}
+
+/* ---------- Lo oculto: afiche para arrancar sobre el hero ---------- */
+.bf-rasgar{position:absolute;inset:0;width:100%;height:100%;z-index:4;touch-action:none;cursor:crosshair;transition:opacity .9s,transform .9s}
+.bf-rasgar.gone{opacity:0;transform:translateY(-30px) rotate(-3deg);pointer-events:none}
+.bf-rasgar-hint{position:absolute;z-index:5;left:22px;top:22px;margin:0;font:800 22px var(--f-poster);letter-spacing:.06em;text-transform:uppercase;background:var(--tinta);color:#fff;padding:5px 10px;pointer-events:none;transition:opacity .4s;animation:bfbob 2s ease-in-out infinite}
+@keyframes bfbob{50%{transform:translate(4px,4px)}}
+.bf-tapar{position:absolute;z-index:6;left:22px;top:22px;font:700 15px var(--f-poster);text-transform:uppercase;letter-spacing:.06em;background:var(--papel);border:2px solid var(--tinta);padding:6px 10px;cursor:pointer}
+.hero-art .veil-control{z-index:7}
+.hero h1 span{display:block;animation:bfsube .9s cubic-bezier(.2,.7,.2,1) both}
+.hero h1 span:nth-child(2){animation-delay:.12s}.hero h1 span:nth-child(3){animation-delay:.24s}
+@keyframes bfsube{from{opacity:0;transform:translateY(.4em);clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 -20% 0)}}
+.ticker div{animation-duration:26s!important}
+
+/* ---------- Juego 3: coser el afiche + entrada real ---------- */
+.tickets-section{flex-wrap:wrap}
+.bf-revela{flex:1 1 100%;--sc:var(--tinta)}
+.bf-revela-grid{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,4vw,50px);align-items:center}
+.bf-sp-wrap{display:flex;gap:18px;align-items:flex-end;flex-wrap:wrap}
+.bf-sp{position:relative;width:min(300px,70vw);aspect-ratio:1448/2048;background:#2b2829;border:2px solid var(--tinta);box-shadow:6px 6px 0 var(--revelacion)}
+.bf-tile{position:absolute;left:0;top:0;width:33.333%;height:33.333%;border:1px dashed rgba(255,255,255,.75);padding:0;cursor:pointer;background:url('assets/poster-revelacion.webp') 0 0/300% 300%;transition:transform .22s cubic-bezier(.3,.7,.3,1)}
+.bf-sp.cosido{background:url('assets/poster-revelacion.webp') center/cover}
+.bf-sp.cosido .bf-tile{border-color:transparent;opacity:0;transition:opacity .6s .2s}
+.bf-sp-status{font:700 20px var(--f-poster);min-height:1.2em;margin:0 0 10px}
+.bf-entrada-wrap{min-width:0}
+.bf-entrada{position:relative;display:grid;grid-template-columns:78fr 22fr;aspect-ratio:1772/591;width:100%;max-width:760px;filter:drop-shadow(8px 10px 0 rgba(31,28,30,.85))}
+.bf-e-main{background:url('assets/marca/entrada.jpg') 0 0/128.2% 100% no-repeat}
+.bf-e-stub{position:relative;background:url('assets/marca/entrada.jpg') 100% 0/454.6% 100% no-repeat;border-left:3px dotted var(--papel);cursor:grab;touch-action:none;transition:transform .2s}
+.bf-entrada.locked .bf-e-stub{cursor:not-allowed}
+.bf-lock{position:absolute;inset:8px;display:grid;place-items:center;text-align:center;font:800 14px/1.1 var(--f-poster);letter-spacing:.05em;text-transform:uppercase;color:#fff;background:rgba(31,28,30,.82);padding:6px}
+.bf-entrada:not(.locked) .bf-lock{display:none}
+.bf-entrada:not(.locked):not(.cortada) .bf-e-stub{animation:bftira 1.6s ease-in-out infinite}
+@keyframes bftira{50%{transform:translateX(6px) rotate(1deg)}}
+.bf-entrada.cortada .bf-e-stub{animation:bfcae 1.1s cubic-bezier(.5,0,.8,.4) forwards}
+@keyframes bfcae{to{transform:translate(60px,140px) rotate(28deg);opacity:0}}
+.bf-e-hint{font:600 19px var(--f-poster);margin:16px 0 0}
+.bf-e-msg{margin-top:16px;background:var(--tinta);color:var(--papel);padding:14px 16px;font:500 19px/1.3 var(--f-poster);animation:bfentra .5s both}
+.bf-e-msg b{display:block;font-family:var(--display);font-size:28px;color:var(--revelacion)}
+.bf-repuerta{margin-top:14px;color:#fff;border-color:#fff}
+
+@media(max-width:900px){
+  .bf-clavija-grid,.bf-rueda,.bf-revela-grid{grid-template-columns:1fr}
+  .bf-rueda-stage{max-width:420px;margin:0 auto;width:100%}
+  .bf-merch{grid-template-columns:repeat(3,1fr)}
+}
+
+/* experiencias: cada tarjeta con el color de su momento */
+.experience-card:nth-child(1){--cc:var(--oculto)}.experience-card:nth-child(2){--cc:var(--tension)}.experience-card:nth-child(3){--cc:var(--giro)}
+.experience-card:nth-child(4){--cc:#00707F}.experience-card:nth-child(5){--cc:var(--equilibrio)}.experience-card:nth-child(6){--cc:#B07800}
+.experience-card,.experience-card:nth-child(2n){background:var(--cc)!important;border-color:var(--cc)!important}
+.bf-entrar3d{box-shadow:4px 4px 0 var(--cc,var(--sc))}
+
+/* slogan original en el inicio (en fondo claro va el original; en fondos oscuros, la versión blanca) */
+.hero-tagline.bf-tagline-img{border-left:0;padding-left:0}
+.hero-tagline.bf-tagline-img img{display:block;width:clamp(200px,22vw,320px);height:auto}
+
+/* sin tipografía de afiches en los fondos de las secciones */
+.intro-section::before,.concept-section::before,.agenda-section::before,.ventures-section::before,.info-section::before,.impact-section::before,.arrival-section::before,.app-section::before,.tickets-section::before{background-image:none!important}
+
+/* que se lean los botones */
+.agenda-filters button:not(.active){color:var(--tension)!important;border-color:var(--tension)!important;background:#fff!important}
+.agenda-filters button.active{color:#fff!important}
+.category-list button:not(.active){color:var(--giro)!important;background:#fff!important}
+.category-list button:not(.active) span{color:var(--giro)!important}
+.category-list button.active{color:#fff!important}
+
+/* la rueda sobre el fondo oscuro del afiche de El giro */
+.bf-rueda{background:#1c1a1b url('assets/poster-giro.webp') center 30%/cover no-repeat;color:#fff;border-color:#000}
+.bf-rueda::before{background:#1c1a1b}
+.bf-rueda .bf-juego-head h3,.bf-rueda .bf-juego-head p{color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.6)}
+.bf-rueda .bf-juego-head{background:rgba(20,18,19,.55);padding:16px 18px;backdrop-filter:blur(2px)}
+.bf-rueda .bf-rueda-res{color:#fff}
+.bf-rueda .bf-rueda-res b{color:var(--tinta)}
+.bf-rueda .bf-aguja{border-top-color:#fff}
+
+/* mapa: lista de espacios en azul petróleo */
+.map-zone-list button{color:#00707F!important;border-color:#00707F!important;background:#fff!important}
+.map-zone-list button.active,.map-zone-list button:hover{background:#00707F!important;color:#fff!important}
+.experience-card img{object-fit:cover;object-position:center}
