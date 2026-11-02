@@ -1,0 +1,168 @@
+/* Capa de juegos y animación para la app de Bioferia. Se suma a mobile.css / identity.css / layout-v2.css. */
+.app-shell{position:relative}
+.app-shell[data-theme="giro"]{--theme-bg:#C15F2B;--theme-active:#C15F2B}
+.jg-marker{font-family:"Permanent Marker","Comic Sans MS",cursive}
+
+/* sistema: cada sección es un subconcepto */
+.jg-sub{position:absolute!important;z-index:3!important;top:16px;right:16px;display:flex;flex-direction:column;align-items:flex-end;font:700 11px/1.1 'Big Shoulders',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--theme-ink);padding:5px 8px;border:1px solid currentColor;animation:jgSub .6s .25s cubic-bezier(.3,1.5,.5,1) backwards}
+.jg-sub small{font-family:"Permanent Marker",cursive;font-size:12px;letter-spacing:0;text-transform:none;opacity:.9}
+.jg-subbar{position:relative;height:0}
+.jg-subbar .jg-sub{top:-6px;right:-4px;color:var(--theme-active)}
+@keyframes jgSub{from{opacity:0;transform:translateY(-8px) rotate(-4deg)}}
+
+/* entrada animada de cada pantalla */
+.app-content.jg-enter>*{animation:jgRise .5s cubic-bezier(.2,.8,.2,1) backwards}
+.app-content.jg-enter>*:nth-child(2){animation-delay:.06s}.app-content.jg-enter>*:nth-child(3){animation-delay:.12s}.app-content.jg-enter>*:nth-child(4){animation-delay:.18s}.app-content.jg-enter>*:nth-child(5){animation-delay:.24s}.app-content.jg-enter>*:nth-child(n+6){animation-delay:.3s}
+@keyframes jgRise{from{opacity:0;transform:translateY(16px)}}
+.app-content.jg-enter .app-hero h1{animation:jgTitle .7s .05s cubic-bezier(.2,.8,.2,1) backwards}
+@keyframes jgTitle{from{clip-path:inset(0 100% 0 0);transform:translateX(-10px)}to{clip-path:inset(0 0 0 0)}}
+.app-content.jg-enter .page-body>*{animation:jgRise .5s cubic-bezier(.2,.8,.2,1) backwards}
+.app-content.jg-enter .page-body>*:nth-child(2){animation-delay:.08s}.app-content.jg-enter .page-body>*:nth-child(3){animation-delay:.14s}.app-content.jg-enter .page-body>*:nth-child(4){animation-delay:.2s}.app-content.jg-enter .page-body>*:nth-child(n+5){animation-delay:.26s}
+.app-hero::before{animation:jgThread 9s ease-in-out infinite alternate}
+@keyframes jgThread{to{transform:translateX(-14px) scaleY(1.04)}}
+.app-content[data-screen="guide"] .app-hero::before,.app-content[data-screen="wallet"] .app-hero::before{animation-name:jgThreadFlip}
+@keyframes jgThreadFlip{from{transform:scaleX(-1)}to{transform:scaleX(-1) translateX(-14px)}}
+.app-nav .jg-pop .nav-icon{animation:jgNav .55s cubic-bezier(.3,1.7,.5,1)}
+@keyframes jgNav{30%{transform:translateY(-6px) scale(1.25)}}
+.forward-arrow{transition:transform .25s cubic-bezier(.3,1.6,.5,1)}
+button:hover .forward-arrow,button:active .forward-arrow{transform:translate(2px,-2px) rotate(8deg)}
+.map-pin{animation:jgPin 2.6s ease-in-out infinite}
+.map-pin:nth-child(3){animation-delay:.3s}.map-pin:nth-child(4){animation-delay:.6s}.map-pin:nth-child(5){animation-delay:.9s}.map-pin:nth-child(6){animation-delay:1.2s}.map-pin:nth-child(7){animation-delay:1.5s}
+@keyframes jgPin{50%{box-shadow:0 0 0 7px rgba(255,255,255,.35)}}
+.map-pin.jg-visited{outline:3px solid #1F1C1E;outline-offset:2px}
+.receipt-mark.jg-stamp{animation:jgStamp .6s cubic-bezier(.3,1.8,.5,1)}
+@keyframes jgStamp{from{transform:scale(2.4) rotate(-20deg);opacity:0}}
+
+.jg-toast{position:absolute;z-index:60;left:16px;right:16px;bottom:84px;background:#1F1C1E;color:#fff;padding:12px 14px;font:600 15px/1.3 'Space Grotesk',sans-serif;transform:translateY(20px);opacity:0;transition:.35s;pointer-events:none}
+.jg-toast.on{transform:none;opacity:1}
+
+/* overlay de juego */
+.jg-game{position:absolute;inset:0;z-index:50;background:var(--gbg);display:flex;flex-direction:column;animation:jgIn .5s cubic-bezier(.2,.8,.2,1)}
+.jg-game[hidden]{display:none}
+@keyframes jgIn{from{clip-path:circle(0 at 50% 55%)}to{clip-path:circle(140% at 50% 55%)}}
+.jg-head{position:relative;background:var(--gc);color:#fff;padding:calc(14px + env(safe-area-inset-top,0px)) 14px 30px;display:flex;gap:10px;align-items:flex-start}
+.jg-head::after{content:"";position:absolute;inset:auto 0 -1px;height:22px;background:url('resources/papel-rasgado.svg') center bottom/100% 100% no-repeat}
+.jg-head button{border:1px solid #fff;background:transparent;color:#fff;font:700 14px 'Big Shoulders',sans-serif;padding:5px 9px;flex:none}
+.jg-head div{flex:1;min-width:0}
+.jg-eye{margin:0;font:700 12px 'Big Shoulders',sans-serif;letter-spacing:.14em;text-transform:uppercase;opacity:.9}
+.jg-head h3{margin:2px 0 0;font:700 27px/1 'Space Grotesk',sans-serif;letter-spacing:-.04em}
+.jg-goal{margin:0;padding:12px 18px 0;font-size:16px;line-height:1.3}
+.jg-stage{position:relative;flex:1;margin:10px 14px;min-height:0}
+.jg-msg{margin:0;padding:0 18px;font:21px/1.15 "Permanent Marker",cursive;min-height:2.4em;color:var(--gc)}
+.jg-act{padding:6px 18px calc(14px + env(safe-area-inset-bottom,0px))}
+.jg-btn{width:100%;border:0;background:var(--gc);color:#fff;font:700 16px 'Space Grotesk',sans-serif;padding:14px 16px;text-align:left}
+.jg-confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:8}
+.jg-cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+
+/* pagar tirando del hilo */
+.jg-pull{margin:16px 0 8px;background:#fff;border:1px solid var(--line,#dcd8d2);padding:0 14px 12px;animation:jgRise .5s backwards}
+.jg-pull canvas{display:block;width:calc(100% + 28px);margin:0 -14px;height:190px;touch-action:none;cursor:grab}
+.jg-phrase{margin:0 0 8px;text-align:center;font:22px/1.2 "Permanent Marker",cursive;min-height:1.2em}
+.jg-ruler{position:relative;height:14px;border-bottom:2px solid #1F1C1E;background:repeating-linear-gradient(90deg,#1F1C1E 0 1.5px,transparent 1.5px 20px) left bottom/100% 6px no-repeat}
+.jg-ruler .z{position:absolute;bottom:0;top:-2px;background:rgba(233,169,0,.55)}
+.jg-ruler .d{position:absolute;bottom:-7px;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:#1F1C1E}
+.jg-ruler .d.over{background:#D93A26}
+.jg-ruler .d b{position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--theme-active);transform:scale(0)}
+.jg-rl{display:flex;justify-content:space-between;margin-top:6px;font:700 11px 'Big Shoulders',sans-serif;letter-spacing:.12em;color:var(--muted,#625f60)}
+.jg-alt{display:block;margin:10px auto 0;border:0;background:none;color:var(--muted,#625f60);text-decoration:underline;font:600 13px 'Space Grotesk',sans-serif}
+.jg-applied{margin:-4px 0 6px;font:700 13px 'Big Shoulders',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#C15F2B}
+
+/* cuponera para rascar */
+.coupon-item.jg-coupon{position:relative;overflow:hidden;padding-right:96px!important;min-height:120px}
+.jg-cs{position:absolute;right:12px;top:50%;width:72px;height:72px;margin-top:-36px;opacity:.9}
+.jg-cbadge{margin:8px 0 0!important;display:inline-block;font:700 14px "Big Shoulders",sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#fff!important;background:var(--cc);padding:3px 8px}
+.coupon-item.used .jg-cbadge{background:#9a958b;text-decoration:line-through}
+.coupon-item.pop .jg-cbadge{animation:jgStamp .6s cubic-bezier(.3,1.8,.5,1)}
+.jg-veil{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair;z-index:2}
+.jg-veil-hint{position:absolute;z-index:3;right:14px;bottom:10px;font:22px "Permanent Marker",cursive;color:#003B94;pointer-events:none;transition:opacity .3s;animation:jgFloat 2.2s ease-in-out infinite}
+@keyframes jgFloat{50%{transform:translateY(-4px) rotate(-3deg)}}
+.jg-cstate{display:block;font-style:normal;font:700 12px 'Big Shoulders',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--theme-active);margin-top:3px}
+
+/* carga apilando */
+.jg-stonebtn{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;text-align:left;margin:0 0 12px;padding:14px;border:0;background:var(--theme-bg);color:#fff;background-image:radial-gradient(rgba(255,255,255,.18) 1.2px,transparent 1.4px);background-size:12px 12px;animation:jgRise .5s .1s backwards}
+.jg-stonebtn strong{display:block;font:700 18px 'Space Grotesk',sans-serif}
+.jg-stonebtn small{font-size:14px;opacity:.9}
+.jg-stonebtn b{font-size:22px}
+
+/* morse */
+.jg-mo{position:absolute;inset:0;display:flex;flex-direction:column;gap:10px}
+.jg-sign{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#1F1C1E;color:#fff;padding:10px 14px}
+.jg-sign span{font:700 15px 'Space Grotesk',sans-serif;line-height:1.1}
+.jg-sign small{display:block;font:600 13px 'Big Shoulders',sans-serif;letter-spacing:.06em;opacity:.8}
+.jg-sign b{font:700 38px 'Space Grotesk',sans-serif;letter-spacing:.12em;color:#E9A900}
+.jg-tape{width:100%;height:70px;display:block;flex:none}
+.jg-word{display:flex;justify-content:center;gap:16px}
+.jg-word .l{display:grid;justify-items:center;gap:6px}
+.jg-word b{font:700 46px/1 'Space Grotesk',sans-serif;color:#BCD3D7}
+.jg-word .ok b{color:#287C8B;animation:jgStamp .45s cubic-bezier(.3,1.7,.5,1)}
+.jg-word span{display:flex;gap:4px}
+.jg-word i{display:block;height:10px;border:2px solid #287C8B;border-radius:5px}
+.jg-word i.d{width:10px}.jg-word i.r{width:24px}.jg-word i.on{background:#287C8B}
+.jg-word .err{animation:jgShake .35s}
+@keyframes jgShake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.jg-key{margin:auto auto 0;width:140px;height:140px;flex:none;border-radius:50%;border:0;background:radial-gradient(circle at 40% 35%,#3a3a3a,#111);box-shadow:0 13px 0 #9a7a32,0 17px 24px rgba(0,0,0,.35);color:#fff;font:700 16px 'Big Shoulders',sans-serif;letter-spacing:.06em;touch-action:none;user-select:none;-webkit-user-select:none;transition:transform .06s,box-shadow .06s}
+.jg-key.down{transform:translateY(9px);box-shadow:0 4px 0 #9a7a32,0 6px 12px rgba(0,0,0,.35)}
+.jg-help{margin:0;text-align:center;font-size:15px;color:#625f60}
+.location-card.jg-zone{border-left:8px solid var(--zc)}
+.jg-reg{margin-top:10px;border:0;background:#287C8B;color:#fff;font:700 15px 'Space Grotesk',sans-serif;padding:10px 12px;animation:jgRise .45s backwards}
+.jg-done{margin:10px 0 0!important;font:20px "Permanent Marker",cursive;color:var(--zc)}
+
+/* mi recorrido */
+.jg-ticket{position:relative;background:#fff;border-radius:14px;padding:14px 14px 16px;margin:6px 0 16px;box-shadow:0 10px 26px rgba(31,28,30,.14);-webkit-mask:radial-gradient(circle at 0 82%,transparent 11px,#000 12px) left/51% 100% no-repeat,radial-gradient(circle at 100% 82%,transparent 11px,#000 12px) right/51% 100% no-repeat;mask:radial-gradient(circle at 0 82%,transparent 11px,#000 12px) left/51% 100% no-repeat,radial-gradient(circle at 100% 82%,transparent 11px,#000 12px) right/51% 100% no-repeat}
+.jg-ticket header,.jg-ticket footer{display:flex;justify-content:space-between;align-items:baseline;font:700 12px 'Big Shoulders',sans-serif;letter-spacing:.12em}
+.jg-ticket footer b{font:700 16px 'Space Grotesk',sans-serif;letter-spacing:0}
+.jg-tmap{position:relative;margin-top:10px;aspect-ratio:1;overflow:hidden}
+.jg-tmap img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(.85) contrast(1.1) brightness(1.1);opacity:.75}
+.jg-tmap svg{position:absolute;inset:0;width:100%;height:100%}
+.jg-hole,.jg-pending{position:absolute;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%}
+.jg-hole{background:radial-gradient(circle at 45% 40%,#d3cdc0,#8E897E);box-shadow:0 0 0 3px var(--hc),inset 0 2px 4px rgba(0,0,0,.45);animation:jgPunch .5s calc(var(--i)*.12s + .3s) cubic-bezier(.3,1.6,.5,1) backwards}
+@keyframes jgPunch{from{transform:scale(2.4);opacity:0}}
+.jg-pending{display:grid;place-items:center;border:2px dashed #1F1C1E;background:rgba(255,255,255,.75);font:700 10px 'Big Shoulders',sans-serif}
+.jg-perf{border-top:2.5px dotted #1F1C1E;margin:14px -4px 10px}
+.jg-bracelet{display:block;width:100%;height:220px}
+.jg-trama{margin:0 0 10px;text-align:center;font:22px "Permanent Marker",cursive;color:var(--theme-active)}
+.jg-strands{display:grid;gap:6px;margin-bottom:12px}
+.jg-strands div{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:10px;align-items:center;font-size:14px;opacity:.38}
+.jg-strands div.on{opacity:1}
+.jg-strands i{height:8px;border-radius:4px;background:var(--sc)}
+.jg-strands small{color:#625f60}
+.festival-actions .jg-new{animation:jgRise .5s .25s backwards}
+
+/* tienda */
+.jg-shop{display:flex;gap:12px;overflow-x:auto;margin:0 -21px 10px;padding:6px 21px 16px;scroll-snap-type:x mandatory;scrollbar-width:none}
+.jg-shop::-webkit-scrollbar{display:none}
+.jg-prod{flex:0 0 150px;scroll-snap-align:start;border:0;background:#fff;border-top:6px solid var(--pc);padding:8px 8px 10px;text-align:left;display:grid;gap:3px;transform:perspective(500px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .2s;box-shadow:0 8px 18px rgba(31,28,30,.12)}
+.jg-prod img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.jg-prod strong{font:700 15px/1.1 'Space Grotesk',sans-serif;margin-top:4px}
+.jg-prod span{font:700 15px 'Big Shoulders',sans-serif;color:var(--theme-active)}
+
+/* kit */
+.jg-kit{position:relative;height:390px}
+.jg-kit-hint{position:absolute;left:0;right:0;top:110px;margin:0;text-align:center;font:26px "Permanent Marker",cursive;color:#C15F2B;animation:jgFloat 2.4s ease-in-out infinite}
+.jg-kit.open .jg-kit-hint{display:none}
+.jg-box{position:absolute;left:50%;bottom:8px;width:220px;height:110px;margin-left:-110px;animation:jgBox 3s ease-in-out infinite}
+.jg-kit.open .jg-box{animation:none}
+@keyframes jgBox{0%,80%,100%{transform:none}86%{transform:rotate(-2deg)}92%{transform:rotate(2deg)}}
+.jg-box .b-back{position:absolute;inset:-14px 4px 0;background:#13204a}
+.jg-box .b-front{position:absolute;inset:0;z-index:3;background:var(--jg-boxtex) center/cover;box-shadow:0 14px 24px rgba(31,28,30,.25);display:flex;align-items:flex-end;padding:10px}
+.jg-box .b-front span{font:700 13px 'Space Grotesk',sans-serif;background:#fff;padding:2px 6px}
+.jg-lid{position:absolute;left:-8px;right:-8px;top:-22px;height:34px;z-index:4;border:0;background:var(--jg-boxtex) center top/cover;box-shadow:0 6px 12px rgba(0,0,0,.25);transition:transform .8s cubic-bezier(.5,-.4,.3,1.4);cursor:grab;touch-action:none}
+.jg-kit.open .jg-lid{transform:translate(96px,-136px) rotate(26deg)!important;pointer-events:none}
+.jg-item{position:absolute;left:50%;bottom:56px;width:80px;margin-left:-40px;z-index:2;background:#fff;padding:5px 5px 6px;border:0;box-shadow:0 8px 16px rgba(31,28,30,.2);transform:translateY(30px) scale(.4);opacity:0;transition:transform .75s cubic-bezier(.3,1.5,.5,1),opacity .3s;transition-delay:calc(var(--i)*90ms + .35s);pointer-events:none}
+.jg-item img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.jg-item span{display:block;font:700 12px/1.05 'Big Shoulders',sans-serif;margin-top:4px;text-align:center}
+.jg-kit.open .jg-item{opacity:1;z-index:5;transform:translate(var(--x),var(--y)) rotate(var(--r));pointer-events:auto}
+.jg-kit-detail{display:grid;grid-template-columns:86px minmax(0,1fr);gap:12px;align-items:center;background:#fff;padding:10px;margin:8px 0 6px;animation:jgRise .35s}
+.jg-kit-detail[hidden]{display:none}
+.jg-kit-detail img{width:86px;height:86px;object-fit:cover}
+.jg-kit-detail strong{font:700 17px 'Space Grotesk',sans-serif}
+.jg-kit-detail p{margin:2px 0 0}
+.jg-peel{height:270px;background:#E9E6DD radial-gradient(rgba(31,28,30,.1) 1.2px,transparent 1.4px) 0 0/16px 16px}
+.jg-peel canvas{width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+.jg-board{display:flex;flex-wrap:wrap;gap:6px;min-height:76px;padding:10px;background:#2b2b2b;margin:10px 0 16px;border-radius:12px 12px 4px 4px;align-items:center}
+.jg-board .stk{width:54px;height:54px;border-radius:50%;background:var(--bg) center/cover;transform:rotate(var(--r));animation:jgStamp .5s cubic-bezier(.3,1.6,.5,1);box-shadow:0 2px 4px rgba(0,0,0,.4)}
+.jg-board p{color:#bbb;font-size:15px;margin:auto}
+
+@media (prefers-reduced-motion: reduce){
+  .app-content.jg-enter>*,.app-content.jg-enter .page-body>*,.app-content.jg-enter .app-hero h1,.app-hero::before,.map-pin,.jg-kit-hint,.jg-box,.jg-veil-hint,.jg-hole{animation:none!important}
+}
