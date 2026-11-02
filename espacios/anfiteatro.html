@@ -1,0 +1,348 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Anfiteatro Dedal</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap">
+<style>@font-face{font-family:'Big Shoulders';src:url('../fonts/big-shoulders-variable-latin.woff2') format('woff2');font-weight:100 900;font-display:swap}
+@font-face{font-family:'Clash Display';src:url('../fonts/ClashDisplay-Variable.woff2') format('woff2');font-weight:200 700;font-display:swap}</style>
+<style>
+/* Layout: escena 3D a pantalla completa con luz de día; rótulos arriba y mandos abajo. La revelación: ámbar como luz y mancha, blanco y negro de alto contraste, magenta violáceo como contrapunto. */
+:root {
+  --papel: #F3F3F1;
+  --ambar: #E19A00;
+  --ambar-osc: #8A5A00;
+  --bordo: #931468;
+  --carbon: #1F1C1E;
+  --tinta: #1F1C1E;
+  --display: "Clash Display", "Big Shoulders", "Arial Black", system-ui, sans-serif;
+  --mono: "Big Shoulders", "Arial Narrow", system-ui, sans-serif;
+}
+html, body { height: 100%; }
+body { background: var(--papel); color: var(--tinta); overflow: hidden; font-family: var(--mono); }
+#escena { position: fixed; inset: 0; display: block; width: 100%; height: 100%; touch-action: none; }
+.rotulo {
+  position: fixed; top: 0; left: 0; right: 0;
+  padding-top: calc(14px + env(safe-area-inset-top, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; pointer-events: none;
+}
+.marca { font-family: var(--display); font-weight: 800; line-height: .82; font-size: clamp(26px, 4vw, 40px); color: var(--carbon); letter-spacing: -.02em; }
+.marca small { display: block; font-size: .42em; letter-spacing: .02em; font-weight: 500; }
+.ficha { text-align: right; font-size: 11px; line-height: 1.5; letter-spacing: .06em; text-transform: uppercase; }
+.ficha strong { display: block; font-family: var(--display); font-weight: 800; text-transform: none; letter-spacing: -.01em; font-size: clamp(20px, 3vw, 30px); line-height: 1; color: var(--ambar-osc); margin-bottom: 4px; }
+.ficha .hilo { color: var(--bordo); }
+.mandos {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between;
+}
+.grupo { display: flex; flex-wrap: wrap; gap: 6px; }
+button { font: 600 14px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; background: var(--papel); color: var(--carbon); border: 1.5px dashed var(--carbon); padding: 9px 12px; cursor: pointer; }
+button[aria-pressed="true"] { background: var(--carbon); color: var(--papel); border-style: solid; }
+button:hover { border-style: solid; }
+button:focus-visible { outline: 2px solid var(--ambar); outline-offset: 2px; }
+#revelar { border-color: var(--ambar-osc); color: var(--ambar-osc); }
+#revelar[aria-pressed="true"] { background: var(--ambar); color: var(--carbon); border-color: var(--ambar); }
+.pista { font-size: 11px; opacity: .7; }
+#mostrar { position: fixed; right: max(12px, env(safe-area-inset-right, 0px)); bottom: calc(12px + env(safe-area-inset-bottom, 0px)); opacity: .35; font-size: 11px; padding: 6px 9px; }
+#mostrar:hover { opacity: 1; }
+body.limpio .rotulo, body.limpio .mandos { display: none; }
+body:not(.limpio) #mostrar { display: none; }
+@media (max-width: 520px) { .pista { display: none; } .ficha span { display: none; } }
+body.embebido .marca{display:none}
+</style>
+<script>if(location.search.indexOf("embed")>-1)document.documentElement.classList.add("emb");addEventListener("DOMContentLoaded",()=>{if(document.documentElement.classList.contains("emb"))document.body.classList.add("embebido")});</script>
+
+<canvas id="escena" aria-label="Modelo 3D del escenario de Bio Feria: escenario redondo con una concha acústica de paneles en retícula que giran y forman una imagen, y gradas en medio círculo con asientos en tresbolillo"></canvas>
+
+<header class="rotulo">
+  <div class="marca">BIO<small>FERIA</small></div>
+  <div class="ficha">
+    <strong>El escenario</strong>
+    <span>Instalación · La revelación<br></span>
+    <span class="hilo">Hilo reciclado · descoser</span><br>
+    9 al 11 de abril de 2027
+  </div>
+</header>
+
+<nav class="mandos" aria-label="Controles de la escena">
+  <div class="grupo" role="group" aria-label="Vistas">
+    <button id="v-frente" aria-pressed="true">Desde las gradas</button>
+    <button id="v-escenario" aria-pressed="false">Desde el escenario</button>
+    <button id="v-aerea" aria-pressed="false">Desde arriba</button>
+    <button id="v-lateral" aria-pressed="false">Lateral</button>
+  </div>
+  <div class="grupo">
+    <button id="revelar" aria-pressed="false">Girar los paneles</button>
+    <button id="girar" aria-pressed="false">Recorrer</button>
+    <button id="limpiar">Ocultar textos</button>
+  </div>
+  <div class="pista">Arrastrá para mirar alrededor · rueda o pellizco para acercar</div>
+</nav>
+<button id="mostrar">Mostrar textos</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function () {
+  const C = { papel:'#F3F3F1', ambar:'#E19A00', bordo:'#931468', carbon:'#1F1C1E', crudo:'#E6DDCB', gris:'#9E9A92' };
+  const TAU = Math.PI * 2;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const canvas = document.getElementById('escena');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color('#E6EEF5');
+  scene.fog = new THREE.Fog('#E3EBEE', 34, 80);
+
+  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 200);
+  const controls = new THREE.OrbitControls(camera, canvas);
+  controls.enableDamping = true; controls.dampingFactor = 0.08;
+  controls.minDistance = 1.5; controls.maxDistance = 50;
+  controls.maxPolarAngle = Math.PI * 0.49;
+
+  scene.add(new THREE.HemisphereLight('#FFF6E8', '#8C9A6A', 0.8));
+  const sol = new THREE.DirectionalLight('#FFE7C4', 1.2);
+  sol.position.set(-10, 20, 14);
+  sol.castShadow = true;
+  sol.shadow.mapSize.set(2048, 2048);
+  Object.assign(sol.shadow.camera, { left: -20, right: 20, top: 20, bottom: -20, near: 1, far: 60 });
+  sol.shadow.bias = -0.0005;
+  scene.add(sol);
+
+  // ---------- Texturas ----------
+  function lienzo(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return [c, c.getContext('2d')]; }
+  function textura(c) { const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.anisotropy = renderer.capabilities.getMaxAnisotropy(); return t; }
+  function trama(ctx, w, h, paso, alpha) {
+    ctx.save(); ctx.globalAlpha = alpha;
+    for (let y = 0; y < h; y += paso) { ctx.strokeStyle = Math.random() < .5 ? '#000' : '#fff'; ctx.lineWidth = paso * (.25 + Math.random() * .3); ctx.beginPath(); ctx.moveTo(0, y + Math.random()); ctx.lineTo(w, y + Math.random() * 2); ctx.stroke(); }
+    for (let x = 0; x < w; x += paso) { ctx.strokeStyle = Math.random() < .5 ? '#000' : '#fff'; ctx.lineWidth = paso * (.2 + Math.random() * .3); ctx.beginPath(); ctx.moveTo(x + Math.random(), 0); ctx.lineTo(x + Math.random() * 2, h); ctx.stroke(); }
+    ctx.restore();
+  }
+
+  // Imagen que aparece cuando giran todos los paneles: fotocopia en blanco y negro de alto contraste
+  function canvasRevelado() {
+    const W = 2048, H = 1024, [c, x] = lienzo(W, H);
+    x.fillStyle = '#EDEBE6'; x.fillRect(0, 0, W, H);
+    // trama de medio tono
+    for (let y = 0; y < H; y += 18) for (let px = (y / 18 % 2) * 9; px < W; px += 18) {
+      const k = .5 + .5 * Math.sin(px / 260) * Math.cos(y / 210);
+      x.fillStyle = '#111'; x.beginPath(); x.arc(px, y, 7.5 * k * k, 0, TAU); x.fill();
+    }
+    x.fillStyle = '#111';
+    x.font = '800 470px "Big Shoulders", "Arial Black", sans-serif';
+    x.textAlign = 'center'; x.textBaseline = 'middle';
+    x.fillText('SE VE', W / 2, H * .5);
+    x.strokeStyle = '#EDEBE6'; x.lineWidth = 10;
+    for (let i = 0; i < 9; i++) { x.beginPath(); const y = 160 + i * 90 + Math.random() * 20; x.moveTo(0, y); x.lineTo(W, y + (Math.random() - .5) * 30); x.stroke(); }
+    trama(x, W, H, 5, .1);
+    return c;
+  }
+  function texAmbar() {
+    const S = 512, [c, x] = lienzo(S, S);
+    x.fillStyle = C.ambar; x.fillRect(0, 0, S, S);
+    trama(x, S, S, 4, .12);
+    x.globalAlpha = .18; x.fillStyle = '#8A5A00';
+    for (let k = 0; k < 6; k++) { x.beginPath(); x.arc(Math.random() * S, Math.random() * S, 20 + Math.random() * 60, 0, TAU); x.fill(); }
+    return textura(c);
+  }
+  function texEscenario() {
+    const S = 1024, [c, x] = lienzo(S, S), m = S / 2;
+    x.fillStyle = C.crudo; x.fillRect(0, 0, S, S);
+    trama(x, S, S, 4, .1);
+    // tablas en retícula, cada una apenas corrida
+    x.strokeStyle = 'rgba(80,60,30,.35)'; x.lineWidth = 3;
+    for (let i = 0; i < 16; i++) { const o = (i % 3) * 14; x.beginPath(); x.moveTo(i * 64 + o, 0); x.lineTo(i * 64 + o, S); x.stroke(); }
+    x.setLineDash([16, 12]); x.lineWidth = 6; x.strokeStyle = C.ambar;
+    x.beginPath(); x.arc(m, m, m * .95, 0, TAU); x.stroke();
+    return textura(c);
+  }
+  function texGrada(base) {
+    const W = 1024, H = 128, [c, x] = lienzo(W, H);
+    x.fillStyle = base; x.fillRect(0, 0, W, H);
+    trama(x, W, H, 4, .09);
+    const t = textura(c); t.wrapS = THREE.RepeatWrapping; t.repeat.x = 6; return t;
+  }
+  function texSuelo() {
+    const S = 2048, [c, x] = lienzo(S, S);
+    x.fillStyle = '#E3D8C2'; x.fillRect(0, 0, S, S);
+    trama(x, S, S, 7, .16);
+    [[C.ambar, .2, .25], [C.bordo, .82, .3], [C.ambar, .78, .8], ['#222', .25, .82]].forEach(([col, px, py]) => {
+      x.fillStyle = col; x.globalAlpha = .75;
+      for (let k = 0; k < 40; k++) { const a = Math.random() * TAU, d = Math.random() ** 2 * 120; x.beginPath(); x.arc(px * S + Math.cos(a) * d, py * S + Math.sin(a) * d, 4 + Math.random() * (k < 3 ? 40 : 10), 0, TAU); x.fill(); }
+      x.globalAlpha = 1;
+    });
+    return textura(c);
+  }
+
+  // los colores de la paleta se pasan a lineal para que se vean tal cual (sin quedar pastel)
+  const mat = (opt) => { if (typeof opt.color === 'string') opt.color = new THREE.Color(opt.color).convertSRGBToLinear(); return new THREE.MeshStandardMaterial(Object.assign({ roughness: .85, metalness: 0 }, opt)); };
+  function sombra(o) { o.traverse(m => { if (m.isMesh) { m.castShadow = true; m.receiveShadow = true; } }); return o; }
+  const V = (x, y, z) => new THREE.Vector3(x, y, z);
+
+  // pasto natural del predio (una baldosa de unos 12 m que se repite)
+  function texPasto(rep) {
+    let s = 5; const r = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+    const S = 2048, [c, x] = lienzo(S, S);
+    x.fillStyle = '#6E8A3E'; x.fillRect(0, 0, S, S);
+    for (let i = 0; i < 9000; i++) { x.fillStyle = `rgba(${60 + r() * 60},${95 + r() * 60},${30 + r() * 30},${.25 + r() * .3})`; x.beginPath(); x.arc(r() * S, r() * S, 6 + r() * 26, 0, TAU); x.fill(); }
+    for (let i = 0; i < 60000; i++) { const px = r() * S, py = r() * S, l = 4 + r() * 9; x.strokeStyle = `rgba(${50 + r() * 90},${90 + r() * 80},${25 + r() * 35},${.35 + r() * .4})`; x.lineWidth = 1 + r(); x.beginPath(); x.moveTo(px, py); x.lineTo(px + (r() - .5) * 3, py - l); x.stroke(); }
+    const t = textura(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep, rep); return t;
+  }
+
+  // ---------- Suelo ----------
+  const llano = new THREE.Mesh(new THREE.PlaneGeometry(220, 220), mat({ map: texPasto(18), roughness: 1 }));
+  llano.rotation.x = -Math.PI / 2; llano.position.y = -0.01; llano.receiveShadow = true; scene.add(llano);
+  const alfombra = new THREE.Mesh(new THREE.CircleGeometry(22, 128), mat({ map: texSuelo() }));
+  alfombra.rotation.x = -Math.PI / 2; alfombra.receiveShadow = true; scene.add(alfombra);
+
+  // ---------- Escenario ----------
+  const ESC_R = 4.6, ESC_H = .4;
+  const escenario = new THREE.Mesh(new THREE.CylinderGeometry(ESC_R, ESC_R, ESC_H, 96), [mat({ color: '#B49C78' }), mat({ map: texEscenario() }), mat({ color: '#B49C78' })]);
+  escenario.position.y = ESC_H / 2; scene.add(sombra(escenario));
+
+  // ---------- Concha acústica: retícula de paneles que giran ----------
+  const RC = 5.4, NPAN = 15, PANEL_H = 1.35, PASO_V = 1.45;
+  const lienzoImg = canvasRevelado();
+  const mAmbar = mat({ map: texAmbar(), roughness: .7 });
+  const mCanto = mat({ color: C.carbon, roughness: .6 });
+  const paneles = [];
+  const arco = Math.PI - .24;
+  const ZMAX = ESC_H + .1 + 4 * PASO_V;
+  for (let j = 0; j < NPAN; j++) {
+    const t = Math.PI / 2 + .12 + (j + .5) * arco / NPAN;    // detrás del escenario
+    const mid = (j - (NPAN - 1) / 2) / ((NPAN - 1) / 2);
+    const filas = Math.abs(mid) < .35 ? 4 : (Math.abs(mid) < .75 ? 3 : 2);
+    const d = j % 3 === 0 ? .22 : (j % 3 === 1 ? -.15 : .05);
+    const r = RC + d;
+    const ancho = 2 * RC * Math.sin(arco / NPAN / 2) * .92;
+    for (let f = 0; f < filas; f++) {
+      const y0 = ESC_H + .1 + f * PASO_V + ((j + f) % 2 ? .12 : 0);
+      const yc = y0 + PANEL_H / 2;
+      // cada panel muestra en su cara de atrás su pedazo de la imagen completa
+      const tx = new THREE.CanvasTexture(lienzoImg); tx.encoding = THREE.sRGBEncoding;
+      tx.repeat.set(1 / NPAN * .92, PANEL_H / ZMAX);
+      tx.offset.set(1 - (j + 1) / NPAN + .04 / NPAN, (y0 - ESC_H) / ZMAX * .98);
+      const mImg = mat({ map: tx, roughness: .8 });
+      const geo = new THREE.BoxGeometry(ancho, PANEL_H, .07);
+      const panel = new THREE.Mesh(geo, [mCanto, mCanto, mCanto, mCanto, mAmbar, mImg]);
+      const pivote = new THREE.Group();
+      pivote.position.set(Math.sin(t) * r, yc, Math.cos(t) * r);
+      pivote.lookAt(0, yc, 0);
+      pivote.add(panel);
+      // eje vertical visible
+      const eje = new THREE.Mesh(new THREE.CylinderGeometry(.025, .025, PANEL_H + .1, 8), mCanto);
+      pivote.add(eje);
+      scene.add(sombra(pivote));
+      const giradoInicial = (j * 3 + f) % 5 === 2;
+      panel.rotation.y = giradoInicial ? Math.PI : 0;
+      paneles.push({ panel, base: giradoInicial ? Math.PI : 0, retraso: (j + f * .6) * .09 });
+    }
+    // poste de la retícula, apoyado en el piso
+    const poste = new THREE.Mesh(new THREE.CylinderGeometry(.04, .04, ESC_H + filas * PASO_V + .3, 8), mCanto);
+    poste.position.set(Math.sin(t) * (r + .12), (ESC_H + filas * PASO_V + .3) / 2, Math.cos(t) * (r + .12));
+    scene.add(sombra(poste));
+  }
+
+  // ---------- Gradas en medio círculo con asientos en tresbolillo ----------
+  const GRADAS = 6, R0 = 6.2, ANCHO = 1.35, ALTO = .5;
+  const coloresAsiento = [C.ambar, C.crudo, C.gris, C.ambar, C.bordo, C.crudo];
+  const pasillos = [-.44, .44];
+  const gAsiento = new THREE.CylinderGeometry(.27, .29, .13, 24);
+  let idx = 0;
+  for (let k = 0; k < GRADAS; k++) {
+    const rin = R0 + k * ANCHO, rout = rin + ANCHO, h = ALTO * (k + 1);
+    const pr = [V(rin, 0), V(rin, h), V(rin, h), V(rout, h), V(rout, h), V(rout, 0)].map(v => new THREE.Vector2(v.x, v.y));
+    const g = new THREE.LatheGeometry(pr, 160, -Math.PI / 2, Math.PI);
+    scene.add(sombra(new THREE.Mesh(g, mat({ map: texGrada(k % 2 ? '#EDE6D8' : C.crudo), side: THREE.DoubleSide }))));
+    [-1, 1].forEach(s => {
+      const tapa = new THREE.Mesh(new THREE.PlaneGeometry(ANCHO, h), mat({ color: k % 2 ? '#DCD2BE' : '#D6CBB5', side: THREE.DoubleSide }));
+      tapa.position.set(s * (rin + ANCHO / 2), h / 2, 0); scene.add(sombra(tapa));
+    });
+    // asientos: los hoyuelos del dedal, cada uno en su lugar
+    const r = rin + ANCHO / 2, n = Math.floor(Math.PI * r / .8), off = k % 2 ? .5 : 0;
+    for (let j = 0; j < n; j++) {
+      const a = -Math.PI / 2 + (j + off + .5) / n * Math.PI;
+      if (pasillos.some(p => Math.abs(a - p) < .62 / r)) continue;
+      const s = new THREE.Mesh(gAsiento, mat({ color: coloresAsiento[(idx * 7 + k) % 6], roughness: 1 }));
+      s.position.set(Math.sin(a) * r, h + .065, Math.cos(a) * r);
+      scene.add(sombra(s)); idx++;
+    }
+  }
+
+
+  // ---------- Cámara ----------
+  const vistas = {
+    'v-frente':    { p: [3.5, 6.5, 17], t: [0, 2.4, -1.5] },
+    'v-escenario': { p: [0, 1.9, -.5], t: [0, 2.6, 9] },
+    'v-aerea':     { p: [0, 28, 8], t: [0, 0, 1] },
+    'v-lateral':   { p: [-17, 4, 4], t: [0, 2, 0] }
+  };
+  camera.position.set(...vistas['v-frente'].p); controls.target.set(...vistas['v-frente'].t);
+  let meta = null, recorrer = false;
+  Object.keys(vistas).forEach(id => {
+    document.getElementById(id).addEventListener('click', () => {
+      document.querySelectorAll('[id^="v-"]').forEach(b => b.setAttribute('aria-pressed', String(b.id === id)));
+      meta = { p: V(...vistas[id].p), t: V(...vistas[id].t) };
+      if (reduce) { camera.position.copy(meta.p); controls.target.copy(meta.t); meta = null; }
+    });
+  });
+  controls.addEventListener('start', () => { meta = null; });
+  const bGirar = document.getElementById('girar');
+  bGirar.addEventListener('click', () => { recorrer = !recorrer; bGirar.setAttribute('aria-pressed', String(recorrer)); controls.autoRotate = recorrer; });
+  controls.autoRotateSpeed = 0.6;
+
+  // girar todos los paneles: la retícula se desarma y aparece la imagen
+  let revelado = false, tRev = 0;
+  const bRev = document.getElementById('revelar');
+  bRev.addEventListener('click', () => {
+    revelado = !revelado; tRev = 0;
+    bRev.setAttribute('aria-pressed', String(revelado));
+    bRev.textContent = revelado ? 'Volver al ámbar' : 'Girar los paneles';
+    paneles.forEach(p => { p.desde = p.panel.rotation.y; p.hasta = revelado ? Math.PI : 0; });
+  });
+
+  document.getElementById('limpiar').addEventListener('click', () => document.body.classList.add('limpio'));
+  document.getElementById('mostrar').addEventListener('click', () => document.body.classList.remove('limpio'));
+  window.addEventListener('keydown', e => { if (e.key === 'h' || e.key === 'H') document.body.classList.toggle('limpio'); });
+
+  function ajustar() {
+    const w = window.innerWidth, h = window.innerHeight;
+    renderer.setSize(w, h, false); camera.aspect = w / h;
+    camera.fov = w < 600 ? 58 : 42; camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', ajustar); ajustar();
+
+  const reloj = new THREE.Clock();
+  function cuadro() {
+    const dt = Math.min(reloj.getDelta(), .05);
+    if (paneles[0].hasta !== undefined) {
+      tRev += dt;
+      paneles.forEach(p => {
+        const k = reduce ? 1 : Math.min(1, Math.max(0, (tRev - p.retraso) / .7));
+        const e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+        p.panel.rotation.y = p.desde + (p.hasta - p.desde) * e;
+      });
+    }
+    if (meta) {
+      camera.position.lerp(meta.p, .06); controls.target.lerp(meta.t, .06);
+      if (camera.position.distanceTo(meta.p) < .02) meta = null;
+    }
+    controls.update();
+    renderer.render(scene, camera);
+    requestAnimationFrame(cuadro);
+  }
+  cuadro();
+})();
+</script>
+
+</body></html>
