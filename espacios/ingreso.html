@@ -1,0 +1,390 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Ingreso Bio Feria</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap">
+<style>@font-face{font-family:'Big Shoulders';src:url('../fonts/big-shoulders-variable-latin.woff2') format('woff2');font-weight:100 900;font-display:swap}
+@font-face{font-family:'Clash Display';src:url('../fonts/ClashDisplay-Variable.woff2') format('woff2');font-weight:200 700;font-display:swap}</style>
+<style>
+/* Layout: escena 3D a pantalla completa con luz de día; rótulos arriba y mandos abajo. La tensión: cuerdas violeta y ámbar tirantes entre vigas negras, madera cruda. */
+:root {
+  --papel: #F3F3F1;
+  --violeta: #A330B6;
+  --violeta-osc: #6E1F7C;
+  --ambar: #E19A00;
+  --azul: #003B94;
+  --tinta: #1F1C1E;
+  --display: "Clash Display", "Big Shoulders", "Arial Black", system-ui, sans-serif;
+  --mono: "Big Shoulders", "Arial Narrow", system-ui, sans-serif;
+}
+html, body { height: 100%; }
+body { background: var(--papel); color: var(--tinta); overflow: hidden; font-family: var(--mono); }
+#escena { position: fixed; inset: 0; display: block; width: 100%; height: 100%; touch-action: none; }
+.rotulo {
+  position: fixed; top: 0; left: 0; right: 0;
+  padding-top: calc(14px + env(safe-area-inset-top, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; pointer-events: none;
+}
+.marca { font-family: var(--display); font-weight: 800; line-height: .82; font-size: clamp(26px, 4vw, 40px); color: var(--violeta-osc); letter-spacing: -.02em; }
+.marca small { display: block; font-size: .42em; letter-spacing: .02em; font-weight: 500; }
+.ficha { text-align: right; font-size: 11px; line-height: 1.5; letter-spacing: .06em; text-transform: uppercase; }
+.ficha strong { display: block; font-family: var(--display); font-weight: 800; text-transform: none; letter-spacing: -.01em; font-size: clamp(20px, 3vw, 30px); line-height: 1; color: var(--violeta); margin-bottom: 4px; }
+.ficha .hilo { color: #9A6A00; }
+.mandos {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between;
+}
+.grupo { display: flex; flex-wrap: wrap; gap: 6px; }
+button { font: 600 14px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; background: var(--papel); color: var(--violeta-osc); border: 1.5px dashed var(--violeta-osc); padding: 9px 12px; cursor: pointer; }
+button[aria-pressed="true"] { background: var(--violeta-osc); color: var(--papel); border-style: solid; }
+button:hover { border-style: solid; }
+button:focus-visible { outline: 2px solid var(--ambar); outline-offset: 2px; }
+#tensar { border-color: #9A6A00; color: #7A5200; }
+#tensar[aria-pressed="true"] { background: var(--ambar); color: var(--tinta); border-color: var(--ambar); }
+.pista { font-size: 11px; opacity: .7; }
+#mostrar { position: fixed; right: max(12px, env(safe-area-inset-right, 0px)); bottom: calc(12px + env(safe-area-inset-bottom, 0px)); opacity: .35; font-size: 11px; padding: 6px 9px; }
+#mostrar:hover { opacity: 1; }
+body.limpio .rotulo, body.limpio .mandos { display: none; }
+body:not(.limpio) #mostrar { display: none; }
+@media (max-width: 520px) { .pista { display: none; } .ficha span { display: none; } }
+body.embebido .marca{display:none}
+</style>
+<script>if(location.search.indexOf("embed")>-1)document.documentElement.classList.add("emb");addEventListener("DOMContentLoaded",()=>{if(document.documentElement.classList.contains("emb"))document.body.classList.add("embebido")});</script>
+
+<canvas id="escena" aria-label="Modelo 3D del ingreso de Bio Feria: dos mástiles con forma de aguja, de 10 m, con el ojo arriba por donde pasan los cables, y dos anclajes al piso unidos por cuatro cables de borde; entre ellos, más de cien cables rectos violeta y ámbar dibujan un paraboloide que forma un arco; debajo, el stand de ingreso: dos mostradores de madera con kits de entrada y folletos, con un paso en el medio"></canvas>
+
+<header class="rotulo">
+  <div class="marca">BIO<small>FERIA</small></div>
+  <div class="ficha">
+    <strong>El ingreso</strong>
+    <span>Instalación · La tensión<br></span>
+    <span class="hilo">Cáñamo violeta y ámbar · tensado</span><br>
+    9 al 11 de abril de 2027
+  </div>
+</header>
+
+<nav class="mandos" aria-label="Controles de la escena">
+  <div class="grupo" role="group" aria-label="Vistas">
+    <button id="v-45" aria-pressed="true">A 45°</button>
+    <button id="v-frente" aria-pressed="false">Frente</button>
+    <button id="v-abajo" aria-pressed="false">Bajo la trama</button>
+    <button id="v-aerea" aria-pressed="false">Desde arriba</button>
+  </div>
+  <div class="grupo">
+    <button id="tensar" aria-pressed="true">Cuerdas tensas</button>
+    <button id="gente" aria-pressed="false">Sin gente</button>
+    <button id="limpiar">Ocultar textos</button>
+  </div>
+  <div class="pista">Arrastrá para mirar alrededor · rueda o pellizco para acercar</div>
+</nav>
+<button id="mostrar">Mostrar textos</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function () {
+  const TAU = Math.PI * 2;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let semilla = 11;
+  const rnd = () => { semilla = (semilla * 9301 + 49297) % 233280; return semilla / 233280; };
+
+  const canvas = document.getElementById('escena');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color('#E6EEF5');
+  scene.fog = new THREE.Fog('#E3EBEE', 40, 100);
+
+  const camera = new THREE.PerspectiveCamera(42, 1, 0.05, 200);
+  const controls = new THREE.OrbitControls(camera, canvas);
+  controls.enableDamping = true; controls.dampingFactor = .08;
+  controls.minDistance = 1.5; controls.maxDistance = 60;
+  controls.maxPolarAngle = Math.PI * .495;
+
+  scene.add(new THREE.HemisphereLight('#FFF4E2', '#8C9A6A', .8));
+  const sol = new THREE.DirectionalLight('#FFE6C2', 1.35);
+  sol.position.set(-12, 24, 14);
+  sol.castShadow = true;
+  sol.shadow.mapSize.set(2048, 2048);
+  Object.assign(sol.shadow.camera, { left: -16, right: 16, top: 16, bottom: -16, near: 1, far: 70 });
+  sol.shadow.bias = -.0005;
+  scene.add(sol);
+
+  // ---------- Texturas y materiales ----------
+  function lienzo(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return [c, c.getContext('2d')]; }
+  function textura(c) { const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.anisotropy = renderer.capabilities.getMaxAnisotropy(); return t; }
+  function texPasto(rep) {
+    let s = 5; const r = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+    const S = 2048, [c, x] = lienzo(S, S);
+    x.fillStyle = '#6E8A3E'; x.fillRect(0, 0, S, S);
+    for (let i = 0; i < 9000; i++) { x.fillStyle = `rgba(${60 + r() * 60},${95 + r() * 60},${30 + r() * 30},${.25 + r() * .3})`; x.beginPath(); x.arc(r() * S, r() * S, 6 + r() * 26, 0, TAU); x.fill(); }
+    for (let i = 0; i < 60000; i++) { const px = r() * S, py = r() * S, l = 4 + r() * 9; x.strokeStyle = `rgba(${50 + r() * 90},${90 + r() * 80},${25 + r() * 35},${.35 + r() * .4})`; x.lineWidth = 1 + r(); x.beginPath(); x.moveTo(px, py); x.lineTo(px + (r() - .5) * 3, py - l); x.stroke(); }
+    const t = textura(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep, rep); return t;
+  }
+  function texMadera(base) {
+    semilla = 31;
+    const W = 256, H = 512, [c, x] = lienzo(W, H);
+    x.fillStyle = base; x.fillRect(0, 0, W, H);
+    for (let i = 0; i < 70; i++) { x.strokeStyle = `rgba(70,45,20,${.06 + rnd() * .1})`; x.lineWidth = 1 + rnd() * 3; x.beginPath(); const px = rnd() * W; x.moveTo(px, 0); x.bezierCurveTo(px + 10, H * .3, px - 10, H * .6, px + 4, H); x.stroke(); }
+    const t = textura(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; return t;
+  }
+  function texCuerda() {                                   // torsión del cáñamo
+    const W = 64, H = 256, [c, x] = lienzo(W, H);
+    x.fillStyle = '#fff'; x.fillRect(0, 0, W, H);
+    x.strokeStyle = 'rgba(0,0,0,.28)'; x.lineWidth = 5;
+    for (let y = -W; y < H + W; y += 14) { x.beginPath(); x.moveTo(0, y); x.lineTo(W, y + W * .7); x.stroke(); }
+    const t = textura(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(1, 60); return t;
+  }
+  const lin = h => new THREE.Color(h).convertSRGBToLinear();
+  const mat = (opt) => { if (typeof opt.color === 'string') opt.color = lin(opt.color); return new THREE.MeshStandardMaterial(Object.assign({ roughness: .9, metalness: 0 }, opt)); };
+  const tCuerda = texCuerda();
+  const mVioleta = mat({ color: '#A330B6', map: tCuerda, roughness: .9, side: THREE.DoubleSide });
+  const mAmbar = mat({ color: '#E19A00', map: tCuerda, roughness: .9, side: THREE.DoubleSide });
+  const mCrudoSoga = mat({ color: '#CDB68C', map: tCuerda, roughness: 1 });
+  const mViga = mat({ color: '#2B2B2B', roughness: .55, metalness: .3 });
+  const mMadera = mat({ map: texMadera('#C8A27A'), roughness: .85 });
+  const mMaderaOsc = mat({ map: texMadera('#8A6A44') });
+  const mCrudo = mat({ color: '#E6DDCB', roughness: .8 });
+  function sombra(o) { o.traverse(m => { if (m.isMesh) { m.castShadow = true; m.receiveShadow = true; } }); return o; }
+
+  // modelo en metros, el mismo de la planta: (x, y) en el piso, z hacia arriba. En three: X = x−7, Y = z, Z = 3,5 − y
+  const W = (x, y, z) => new THREE.Vector3(x - 7, z, 3.5 - y);
+  const T = [0, 3, 8], F = [7, 0, .6], C = [13, 3, 6.5], B = [6, 7, 1.0], R = [14.5, .6, .5];
+  const G = [[-1.6, .6], [-1.8, 4.8], [.6, 7.6]];
+  const lerp3 = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+  const S_ = (u, v) => lerp3(lerp3(T, F, u), lerp3(B, C, u), v);           // paraboloide hiperbólico T-F-C-B
+
+  // ---------- Suelo ----------
+  const suelo = new THREE.Mesh(new THREE.PlaneGeometry(140, 140), mat({ map: texPasto(12), roughness: 1 }));
+  suelo.rotation.x = -Math.PI / 2; suelo.receiveShadow = true; scene.add(suelo);
+
+  // ---------- Cintas: se pueden aflojar y tensar ----------
+  // cada cuerda es una cinta chata de cáñamo; su ancho sigue la superficie, como en la referencia
+  const cuerdas = [];
+  function cinta(p0, p1, lado, m, ancho) {
+    const msh = new THREE.Mesh(new THREE.BufferGeometry(), m);
+    msh.castShadow = true; msh.receiveShadow = true; scene.add(msh);
+    const c = { msh, p0, p1, lado: lado.clone().normalize().multiplyScalar(ancho / 2) };
+    const n = 14, pos = new Float32Array((n + 1) * 2 * 3), uv = [], idx = [];
+    for (let i = 0; i <= n; i++) { uv.push(0, i / n, 1, i / n); if (i < n) { const a = i * 2; idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); } }
+    msh.geometry.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    msh.geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+    msh.geometry.setIndex(idx);
+    c.n = n; cuerdas.push(c); return c;
+  }
+  function soga(p0, p1, m, radio) {                       // vientos y patas de la mesa: cuerda redonda
+    const msh = new THREE.Mesh(new THREE.BufferGeometry(), m);
+    msh.castShadow = true; scene.add(msh);
+    const c = { msh, p0, p1, radio, tubo: true }; cuerdas.push(c); return c;
+  }
+  function formar(c, flojo) {
+    const largo = c.p0.distanceTo(c.p1);
+    const punto = t => { const p = c.p0.clone().lerp(c.p1, t); p.y -= 4 * t * (1 - t) * largo * .09 * flojo; return p; };
+    if (c.tubo) {
+      const pts = []; for (let i = 0; i <= 10; i++) pts.push(punto(i / 10));
+      c.msh.geometry.dispose();
+      c.msh.geometry = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 12, c.radio, 6, false);
+      return;
+    }
+    const a = c.msh.geometry.attributes.position;
+    for (let i = 0; i <= c.n; i++) {
+      const p = punto(i / c.n);
+      a.setXYZ(i * 2, p.x + c.lado.x, p.y + c.lado.y, p.z + c.lado.z);
+      a.setXYZ(i * 2 + 1, p.x - c.lado.x, p.y - c.lado.y, p.z - c.lado.z);
+    }
+    a.needsUpdate = true; c.msh.geometry.computeVertexNormals(); c.msh.geometry.computeBoundingSphere();
+  }
+
+  // ---------- Paraboloide de cables: dos mástiles y dos anclajes al piso ----------
+  // modelo en metros: x a lo largo del paso, y de lado a lado, z hacia arriba
+  const Q = (x, y, z) => new THREE.Vector3(x, z, -y);
+  const HM = 10, XM = 6.5, YG = 8, N = 56;
+  const P1 = [-XM, 0, HM - .3], G1 = [0, -YG, 0], P2 = [XM, 0, HM - .3], G2 = [0, YG, 0];   // los cuatro vértices
+  const L3 = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+  const S = (u, v) => L3(L3(P1, G1, u), L3(G2, P2, u), v);                       // superficie reglada
+  const V3 = p => Q(p[0], p[1], p[2]);
+  function barra(p, q, r, m) {
+    const L = p.distanceTo(q), b = new THREE.Mesh(new THREE.CylinderGeometry(r, r * 1.15, L, 16), m);
+    b.position.copy(p).lerp(q, .5); b.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), q.clone().sub(p).normalize()); scene.add(sombra(b)); return b;
+  }
+  const estaca = p => { const e = new THREE.Mesh(new THREE.CylinderGeometry(.06, .05, .5, 8), mMaderaOsc); e.position.copy(p).setY(.2); scene.add(sombra(e)); };
+  const mCable = mat({ color: '#A330B6', roughness: .4, metalness: .4 }), mCableAmb = mat({ color: '#E19A00', roughness: .4, metalness: .4 });
+  const mAcero = mat({ color: '#D5D9DD', roughness: .3, metalness: .6 });
+  const mBorde = mat({ color: '#2B2B2B', roughness: .4, metalness: .6 });
+  const senda = new THREE.Mesh(new THREE.PlaneGeometry(40, 12), mat({ color: '#B9A47E', roughness: 1 }));
+  senda.rotation.x = -Math.PI / 2; senda.position.y = .01; senda.receiveShadow = true; scene.add(senda);
+
+  // dos mástiles iguales, con vientos hacia afuera
+  [P1, P2].forEach(P => {
+    const s = Math.sign(P[0]);
+    // el mástil es una aguja: cuerpo de acero que se afina hacia la punta clavada en el piso, y arriba el ojo por donde pasan los cables
+    const perfil = [[0.0, -.4], [.025, 0], [.05, 2], [.065, 6], [.075, HM - 2.0], [.11, HM - 1.6]].map(([r, z]) => new THREE.Vector2(r, z));
+    const cuerpo = new THREE.Mesh(new THREE.LatheGeometry(perfil, 24), mAcero); cuerpo.position.copy(Q(P[0], 0, 0)); scene.add(sombra(cuerpo));
+    const ojo = new THREE.Shape(), hueco = new THREE.Path(), w = .24, h = 1.5, wi = .1, hi = 1.12;
+    ojo.absellipse(0, 0, w, h, 0, TAU, false); hueco.absellipse(0, 0, wi, hi, 0, TAU, true); ojo.holes.push(hueco);
+    const gOjo = new THREE.ExtrudeGeometry(ojo, { depth: .08, bevelEnabled: true, bevelSize: .02, bevelThickness: .02, curveSegments: 40 }); gOjo.translate(0, 0, -.04);
+    const mOjo = new THREE.Mesh(gOjo, mAcero); mOjo.position.copy(Q(P[0], 0, HM - .3)); mOjo.rotation.y = Math.PI / 2; scene.add(sombra(mOjo));   // el ojo mira hacia quien llega
+    const base = new THREE.Mesh(new THREE.BoxGeometry(.7, .08, .7), mBorde); base.position.copy(Q(P[0], 0, .04)); scene.add(sombra(base));
+    [-3, 3].forEach(yy => { const g = Q(P[0] + s * 5, yy, .05); soga(Q(P[0], 0, HM), g, mCrudoSoga, .025); estaca(g); });
+  });
+  // dos anclajes al piso: bloques de madera con argollas
+  [G1, G2].forEach(G => { const b = new THREE.Mesh(new THREE.BoxGeometry(1.2, .35, .8), mMaderaOsc); b.position.copy(Q(G[0], G[1], .17)); scene.add(sombra(b)); });
+  // los cuatro cables de borde, más gruesos y oscuros
+  [[P1, G1], [G1, P2], [P2, G2], [G2, P1]].forEach(([a, b]) => soga(V3(a), V3(b), mBorde, .03));
+  // dos familias de cables rectos entre bordes opuestos: juntos dibujan la curva
+  for (let i = 1; i < N; i++) {
+    const t = i / N, m = i % 6 === 3 ? mCableAmb : mCable;
+    soga(V3(S(t, 0)), V3(S(t, 1)), m, .011);
+    soga(V3(S(0, t)), V3(S(1, t)), m, .011);
+  }
+
+  // ---------- El stand de ingreso: dos mostradores bajo el arco, con un paso en el medio ----------
+  const mKraft = mat({ color: '#B98A5A', roughness: .95 }), mPapel = mat({ color: '#F3F3F1', roughness: .9 });
+  const mFolleto = [mat({ color: '#A330B6', roughness: .8 }), mat({ color: '#E19A00', roughness: .8 }), mat({ color: '#003B94', roughness: .8 }), mPapel];
+  semilla = 57;
+  [[-4.6, -1.3], [1.3, 4.6]].forEach(([y0, y1]) => {
+    const L = y1 - y0, yc = (y0 + y1) / 2;
+    const tapa = new THREE.Mesh(new THREE.BoxGeometry(.85, .06, L), mMadera); tapa.position.copy(Q(.3, yc, 1.0)); scene.add(sombra(tapa));
+    const frente = new THREE.Mesh(new THREE.BoxGeometry(.04, .9, L), mMaderaOsc); frente.position.copy(Q(-.1, yc, .5)); scene.add(sombra(frente));
+    [y0 + .1, y1 - .1].forEach(yy => { const p = new THREE.Mesh(new THREE.BoxGeometry(.8, .95, .05), mMaderaOsc); p.position.copy(Q(.3, yy, .48)); scene.add(sombra(p)); });
+    // kits de entrada: bolsas de papel madera, cajas y pilas de folletos
+    for (let k = 0; k < Math.floor(L / .45); k++) {
+      const yy = y0 + .3 + k * .45, tipo = k % 3;
+      if (tipo === 0) { const b = new THREE.Mesh(new THREE.BoxGeometry(.18, .32, .3), mKraft); b.position.copy(Q(.42, yy, 1.19)); scene.add(sombra(b)); }
+      else if (tipo === 1) { const c = new THREE.Mesh(new THREE.BoxGeometry(.3, .14, .26), mKraft); c.position.copy(Q(.35, yy, 1.1)); scene.add(sombra(c));
+        const cinta = new THREE.Mesh(new THREE.BoxGeometry(.31, .02, .04), mFolleto[k % 2]); cinta.position.copy(Q(.35, yy, 1.18)); scene.add(cinta); }
+      else { const h = .04 + rnd() * .08; const f = new THREE.Mesh(new THREE.BoxGeometry(.21, h, .15), mFolleto[(k / 3 | 0) % 4]); f.position.copy(Q(.1, yy, 1.03 + h / 2)); scene.add(sombra(f)); }
+    }
+    // banquetas detrás del mostrador para quien atiende
+    [yc - L / 4, yc + L / 4].forEach(yy => { const t = new THREE.Mesh(new THREE.CylinderGeometry(.18, .16, .7, 14), mMaderaOsc); t.position.copy(Q(1.2, yy, .35)); scene.add(sombra(t)); });
+  });
+
+  // ---------- Tensar y aflojar ----------
+  let tenso = true, k = 0;       // k = cuánto cuelgan (0 tensas, 1 flojas)
+  cuerdas.forEach(c => formar(c, 0));
+  const bT = document.getElementById('tensar');
+  bT.addEventListener('click', () => {
+    tenso = !tenso;
+    bT.setAttribute('aria-pressed', String(tenso));
+    bT.textContent = tenso ? 'Cuerdas tensas' : 'Cuerdas flojas';
+    if (reduce) { k = tenso ? 0 : 1; cuerdas.forEach(c => formar(c, k)); }
+  });
+
+  // ---------- Gente (opcional): figuras neutras, con piernas y brazos, para leer la escala y el flujo ----------
+  const NG = 110;
+  const mG = new THREE.MeshStandardMaterial({ roughness: .9 });
+  const parte = (geo) => { const m = new THREE.InstancedMesh(geo, mG, NG); m.castShadow = true; m.visible = false; scene.add(m); return m; };
+  const gTorso = new THREE.CylinderGeometry(.19, .15, .58, 10), gCabeza = new THREE.SphereGeometry(.11, 12, 10);
+  const gPierna = new THREE.CylinderGeometry(.075, .06, .86, 8); gPierna.translate(0, -.43, 0);
+  const gBrazo = new THREE.CylinderGeometry(.05, .04, .62, 8); gBrazo.translate(0, -.31, 0);
+  const torsos = parte(gTorso), cabezas = parte(gCabeza), piernas = parte(gPierna), piernas2 = parte(gPierna), brazos = parte(gBrazo), brazos2 = parte(gBrazo);
+  const PARTES = [torsos, cabezas, piernas, piernas2, brazos, brazos2];
+  const CARR = [[-5.6, -4.9], [-.95, -.35], [.35, .95], [4.9, 5.6]];
+  const remeras = ['#8C8780', '#A39D93', '#6F6A64', '#BDB5A8', '#5B5F66', '#7D746A', '#C9C0B2', '#4E4A46'];
+  const pantalones = ['#3E3B38', '#5A554F', '#6E6A64', '#2F3238', '#4A4540'];
+  semilla = 91;
+  const gente = [];
+  for (let i = 0; i < NG; i++) {
+    gente.push({ c: CARR[Math.floor(rnd() * 4)], u: rnd(), z: 22 - rnd() * 38, v: 1.0 + rnd() * .5, h: 1.55 + rnd() * .3, fase: rnd() * TAU, afuera: (rnd() - .5) * 14 });
+    const r = new THREE.Color(remeras[i % 8]).convertSRGBToLinear(), p = new THREE.Color(pantalones[i % 5]).convertSRGBToLinear();
+    torsos.setColorAt(i, r); brazos.setColorAt(i, r); brazos2.setColorAt(i, r);
+    piernas.setColorAt(i, p); piernas2.setColorAt(i, p);
+    cabezas.setColorAt(i, new THREE.Color('#D9C9B0').convertSRGBToLinear());
+  }
+  const mBase = new THREE.Matrix4(), mLoc = new THREE.Matrix4(), mRot = new THREE.Matrix4(), mOut = new THREE.Matrix4();
+  const qY = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 2), vS = new THREE.Vector3(), vP = new THREE.Vector3();
+  function poner(inst, i, x, y, z, ang) {
+    mLoc.makeTranslation(x, y, z); if (ang) mLoc.multiply(mRot.makeRotationX(ang));
+    inst.setMatrixAt(i, mOut.multiplyMatrices(mBase, mLoc));
+  }
+  // algunos se quedan en el mostrador retirando el kit; el resto camina por los pasos libres
+  gente.forEach((G, i) => { G.quieto = i % 7 === 0; if (G.quieto) { G.yq = (i % 2 ? 1 : -1) * (1.6 + rnd() * 2.7); G.z = -.65; } });
+  function moverGente(dt, t) {
+    gente.forEach((G, i) => {
+      let x, y, giro = -Math.PI / 2, paso = 0, rebote = 0;
+      if (G.quieto) { x = G.z; y = G.yq; }
+      else {
+        if (!reduce) G.z += G.v * dt;
+        if (G.z > 20) G.z -= 40;
+        const enCarril = G.c[0] + G.u * (G.c[1] - G.c[0]);
+        const k = Math.min(1, Math.max(0, (Math.abs(G.z) - 7.5) / 8));
+        y = enCarril + (G.afuera * .7 - enCarril) * k; x = G.z;
+        const fa = t * 5.5 * G.v + G.fase; paso = reduce ? 0 : Math.sin(fa) * .5; rebote = reduce ? 0 : Math.abs(Math.cos(fa)) * .035;
+      }
+      const s = G.h / 1.7;
+      mBase.compose(vP.copy(Q(x, y, rebote)), qY, vS.set(s, s, s));
+      poner(torsos, i, 0, 1.17, 0); poner(cabezas, i, 0, 1.6, 0);
+      poner(piernas, i, -.09, .88, 0, paso); poner(piernas2, i, .09, .88, 0, -paso);
+      poner(brazos, i, -.25, 1.42, 0, -paso * .8); poner(brazos2, i, .25, 1.42, 0, paso * .8);
+    });
+    PARTES.forEach(p => p.instanceMatrix.needsUpdate = true);
+  }
+  moverGente(0, 0);
+  const bG = document.getElementById('gente');
+  bG.addEventListener('click', () => {
+    const on = !torsos.visible; PARTES.forEach(p => p.visible = on);
+    bG.setAttribute('aria-pressed', String(on)); bG.textContent = on ? 'Con gente' : 'Sin gente';
+  });
+
+  // ---------- Cámara ----------
+  const vistas = {
+    'v-45':    { p: Q(-17, -17, 11), t: Q(0, 0, 3.5) },
+    'v-frente':{ p: Q(-22, -2, 1.7), t: Q(0, 0, 4) },
+    'v-abajo': { p: Q(-1, .5, 1.6), t: Q(4, -1, 6.5) },
+    'v-aerea': { p: Q(0, -.5, 34), t: Q(0, 0, 0) }
+  };
+  camera.position.copy(vistas['v-45'].p); controls.target.copy(vistas['v-45'].t);
+  let meta = null;
+  Object.keys(vistas).forEach(id => {
+    document.getElementById(id).addEventListener('click', () => {
+      document.querySelectorAll('[id^="v-"]').forEach(b => b.setAttribute('aria-pressed', String(b.id === id)));
+      meta = { p: vistas[id].p.clone(), t: vistas[id].t.clone() };
+      if (reduce) { camera.position.copy(meta.p); controls.target.copy(meta.t); meta = null; }
+    });
+  });
+  controls.addEventListener('start', () => { meta = null; });
+  document.getElementById('limpiar').addEventListener('click', () => document.body.classList.add('limpio'));
+  document.getElementById('mostrar').addEventListener('click', () => document.body.classList.remove('limpio'));
+  window.addEventListener('keydown', e => { if (e.key === 'h' || e.key === 'H') document.body.classList.toggle('limpio'); });
+
+  function ajustar() {
+    const w = window.innerWidth, h = window.innerHeight;
+    renderer.setSize(w, h, false); camera.aspect = w / h;
+    camera.fov = w < 600 ? 60 : 44; camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', ajustar); ajustar();
+
+  const reloj = new THREE.Clock();
+  let tiempoG = 0;
+  function cuadro() {
+    const dt = Math.min(reloj.getDelta(), .05);
+    const objetivo = tenso ? 0 : 1;
+    if (!reduce && Math.abs(k - objetivo) > .001) {
+      k += Math.sign(objetivo - k) * Math.min(Math.abs(objetivo - k), dt * .9);
+      const e = k * k * (3 - 2 * k);
+      cuerdas.forEach(c => formar(c, e));
+    }
+    if (torsos.visible) moverGente(dt, tiempoG += dt);
+    if (meta) {
+      camera.position.lerp(meta.p, .06); controls.target.lerp(meta.t, .06);
+      if (camera.position.distanceTo(meta.p) < .02) meta = null;
+    }
+    controls.update();
+    renderer.render(scene, camera);
+    requestAnimationFrame(cuadro);
+  }
+  cuadro();
+})();
+</script>
+
+</body></html>
